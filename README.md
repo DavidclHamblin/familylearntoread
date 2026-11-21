@@ -18,3 +18,14 @@ Illustrations on the site are our own placeholders. Customer photos are never pu
 - `assets/js/phonics.js`: the level checker (letter groups and tricky words for each stage, word and sentence limits).
 - `node tools/check_stories.js` checks every page at its stage; the build runs it too.
 - `node tools/export_worker.js ../familyboardbooks/worker/src/readers.js` copies the picture prompts into the shared cartoon service.
+
+## Books, characters and print files
+
+- `books.html` (assets/js/books.js): the Stage 3 library. Look inside any book with your own names, and build a pack
+  of 1, 5 or 10 different stories, printed or online, with the price (packs of 10, then 5, then singles).
+- `make.html` (assets/js/make.js): photos of the child, the grown-up and the pet (or our stand-ins) are drawn once by
+  the shared cartoon service into one draft (book `flr-<first story>`), and one page of the first book is painted free.
+  After ordering, the characters are copied into each book's own draft (`POST /api/drafts/<id>/copy`).
+- `print.html?story=s3-owl` (assets/js/print.js, assets/css/print.css): the 32-page paperback interior and
+  `&part=cover` the cover sheet for Lulu (product `reader`). Without `&d=` it shows our example book with placeholders.
+- assets/js/family.js: names and the chosen pack (this browser only) and the pack price.

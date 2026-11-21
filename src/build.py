@@ -18,6 +18,9 @@ global.window = {}; require(process.argv[1]); console.log(JSON.stringify(window.
 """, str(ROOT / "assets/js/data.js")]))
 CFG, STAGES, PACKS, SCHEMES = data["config"], data["stages"], data["soundPacks"], data["schemes"]
 REGIONS, PRICES, GBP, BAND_STAGE = data["regions"], data["prices"], data["gbp"], data["bandStage"]
+# The stock stories, checked word by word before every build (tools/check_stories.js).
+subprocess.check_call(["node", str(ROOT / "tools/check_stories.js")], stdout=subprocess.DEVNULL)
+READERS = json.loads(subprocess.check_output(["node", "-e", "console.log(JSON.stringify(require(process.argv[1])))", str(ROOT / "assets/js/readers.js")]))
 DISCOUNT = CFG["foundingDiscount"]
 NOT_CONNECTED = ("Reading scheme names belong to their publishers. Family Learn to Read is not connected with "
                  "or endorsed by any reading scheme publisher; we show scheme levels only to help you find a stage.")
@@ -64,7 +67,7 @@ def header(active=""):
         return f'<a href="{href}"{cur}>{label}</a>'
     return f"""<header class="site-head"><div class="wrap">
 <a class="logo" href="index.html" aria-label="Family Learn to Read home">{LOGO}Family Learn to Read</a>
-<nav class="nav" aria-label="Main">{a("index.html#stages", "Stages", "stages")}{a("index.html#sounds", "Sounds", "sounds")}{a("check.html", "Reading check", "check")}{a("index.html#pricing", "Pricing", "pricing")}{a("index.html#faq", "FAQ", "faq")}</nav>
+<nav class="nav" aria-label="Main">{a("index.html#stages", "Stages", "stages")}{a("books.html", "Books", "books")}{a("index.html#sounds", "Sounds", "sounds")}{a("check.html", "Reading check", "check")}{a("index.html#pricing", "Pricing", "pricing")}{a("index.html#faq", "FAQ", "faq")}</nav>
 <label class="region"><span class="sr-only">Deliver to</span><select class="region-select" aria-label="Deliver to">{''.join(f'<option value="{k}">{e(r["label"])}</option>' for k, r in REGIONS.items())}</select></label>
 <a class="btn btn-sm red" href="index.html#join">Join the list</a>
 </div></header>
@@ -75,7 +78,7 @@ def footer():
     return f"""<footer class="site-foot"><div class="wrap foot-grid">
 <div style="display:grid;gap:10px;max-width:380px"><a class="logo" href="index.html">{LOGO}Family Learn to Read</a>
 <p class="small">Early reading books and phonics books with your family as the characters, for ages 4 to 7.</p></div>
-<div style="display:grid;gap:12px"><div class="foot-links"><a href="index.html#stages">Stages</a><a href="index.html#sounds">Sound packs</a><a href="check.html">Reading check</a><a href="schemes.html">School schemes</a><a href="index.html#faq">FAQ</a><a href="index.html#faq-privacy">Photo privacy</a><a href="mailto:{CFG["email"]}">Contact</a></div>
+<div style="display:grid;gap:12px"><div class="foot-links"><a href="index.html#stages">Stages</a><a href="books.html">Yellow books</a><a href="make.html">Make your characters</a><a href="index.html#sounds">Sound packs</a><a href="check.html">Reading check</a><a href="schemes.html">School schemes</a><a href="index.html#faq">FAQ</a><a href="index.html#faq-privacy">Photo privacy</a><a href="mailto:{CFG["email"]}">Contact</a></div>
 <div class="foot-links"><a href="{CFG["storybooks"]}">Family Storybooks</a><a href="{CFG["boardBooks"]}">Family Board Books</a></div>
 <p class="small">&copy; <span data-year>2026</span> Family Learn to Read &middot; familylearntoread.com &middot; part of <a href="{CFG["umbrella"]}">Our Family Presents</a></p>
 <p class="small" style="max-width:62ch">{e(NOT_CONNECTED)}</p></div>
@@ -136,7 +139,7 @@ def stage_card(s):
 <div class="stage-top"><span class="stage-n">Stage {s["n"]}</span><span class="stage-band">{e(s["band"])} band</span></div>
 <p class="stage-what">{e(s["what"])}</p>
 <dl class="stage-facts"><div><dt>School year</dt><dd>{e(s["year"])}</dd></div><div><dt>Phonics</dt><dd>{e(s["phase"])}</dd></div><div><dt>Words</dt><dd>{e(s["text"])}</dd></div></dl>
-<a class="stage-cta" href="#join" data-want="stage-{s["n"]}">Notify me &rarr;</a>
+{f'<a class="stage-cta" href="books.html">See the {len([b for b in READERS if b["stage"] == s["n"]])} books &rarr;</a>' if any(b["stage"] == s["n"] for b in READERS) else f'<a class="stage-cta" href="#join" data-want="stage-{s["n"]}">Notify me &rarr;</a>'}
 </article>"""
 
 
@@ -335,14 +338,102 @@ def schemes():
                 "schemes.html", body, "", scripts=("finder.js",))
 
 
+# ---------- Books (Stage 3 library and pack builder) ----------
+def books(stage=3):
+    st = [x for x in STAGES if x["n"] == stage][0]
+    roles = [r for r in json.loads(subprocess.check_output(["node", "-e", "global.window={FLR:{}};require(process.argv[1]);console.log(JSON.stringify(window.FLR.readerRoles))", str(ROOT / "assets/js/readers.js")]))]
+    names = "".join(f'<label class="field"><span>{e(r["label"])}</span><input type="text" data-name="{r["key"]}" maxlength="20" placeholder="e.g. {e(r["example"])}"></label>' for r in roles)
+    pr = PRICES
+    body = f"""<section class="section" style="--bc:{st["color"]};padding-bottom:24px"><div class="wrap">
+<div class="sec-head"><p class="eyebrow">Stage {stage} · {e(st["band"])} band · {e(st["phase"])}</p><h1>{e(st["band"])} books</h1>
+<p class="lede">Ten short stories for children reading at Stage {stage}: {e(st["what"][0].lower() + st["what"][1:])} Every word is checked against the sounds and tricky words taught by this stage, and your family are the characters on every page.</p></div>
+<div data-library="{stage}" class="lib">
+<details class="bv-names" open><summary>Read them with your names</summary><div class="bv-name-grid">{names}</div></details>
+<div class="lib-cards"></div>
+<div class="bv" tabindex="-1" hidden><h2 class="bv-title"></h2>
+<div class="bv-stage" aria-live="polite"></div>
+<div class="bv-nav"><button class="arrow bv-prev" type="button" aria-label="Previous page">&larr;</button><p class="bv-count"></p><button class="arrow bv-next" type="button" aria-label="Next page">&rarr;</button></div>
+<div class="bv-dots" aria-label="Pages"></div>
+<p class="small muted">Every picture is painted with your family after you order, from the characters you make.</p></div>
+<aside class="pk" aria-label="Your pack"><div class="pk-head"><h2>Your pack</h2><button type="button" class="btn ghost btn-sm pk-all">Choose all 10</button></div>
+<fieldset class="pk-format"><legend class="sr-only">Printed or online</legend>
+<label class="check"><input type="radio" name="pk-format" value="printed"><span>Printed paperbacks ({money(pr["printed"]["sizes"]["1"])} each, 5 for {money(pr["printed"]["sizes"]["5"])}, 10 for {money(pr["printed"]["sizes"]["10"])})</span></label>
+<label class="check"><input type="radio" name="pk-format" value="online"><span>Online only ({money(pr["online"]["sizes"]["1"])} each, 5 for {money(pr["online"]["sizes"]["5"])}, 10 for {money(pr["online"]["sizes"]["10"])})</span></label></fieldset>
+<p class="pk-count"></p><ol class="pk-list"></ol>
+<p class="pk-sum"><span class="pk-total"></span> <span class="pk-how small muted"></span></p>
+<p class="pk-note small" role="status"></p>
+<a class="btn red pk-next" href="make.html">Next: make your characters</a>
+<p class="small muted">Launch prices. Ordering opens soon: founding families on <a href="index.html#join">our list</a> get {DISCOUNT}% off.</p></aside>
+</div></div></section>"""
+    return page(f"{st['band']} reading books with your family | Family Learn to Read",
+                f"Ten personalised Stage {stage} ({st['band']} band) reading books, every word checked for your child's phonics stage. Buy one, or packs of 5 or 10.",
+                "books.html", body, "books", scripts=("phonics.js", "readers.js", "family.js", "books.js"))
+
+
+GUIDE_GOOD = ["A recent photo, in good daylight", "Face to the camera, with the face nice and big", "Eyes clearly visible: no sunglasses or hats pulled low", "Just them in the photo", "For a pet: the whole animal, side on, is ideal"]
+GUIDE_BAD = ["Blurry, dark or very small photos", "Faces far away, turned sideways or partly hidden", "Heavy filters, stickers or edited faces", "Photos of a screen or a printed photo"]
+
+
+def make():
+    good = "".join(f"<li>{e(x)}</li>" for x in GUIDE_GOOD)
+    bad = "".join(f"<li>{e(x)}</li>" for x in GUIDE_BAD)
+    body = f"""<section class="section" style="--bc:var(--red)"><div class="wrap">
+<div class="sec-head"><p class="eyebrow">Free preview</p><h1>Make your characters</h1><p class="lede">Add a photo of your child, the grown-up who reads with them and your pet. We draw each of them once, free, and paint a page of your first book with them. After you order, every book in your pack is painted from these same characters, so your family looks the same in all of them.</p></div>
+<div class="mk" data-maker>
+<div class="mk-pack"></div>
+<div class="guide">
+<div class="guide-col good"><h3>Photos that work best</h3><ul class="ticks">{good}</ul></div>
+<div class="guide-col bad"><h3>Try to avoid</h3><ul class="crosses">{bad}</ul></div>
+<p class="guide-privacy">Your photos stay private. They're shrunk and stripped of hidden details (such as where they were taken) on your device, kept in encrypted storage in the EU, and never shown to anyone else. If you don't order, they're deleted after 14 days, or you can delete them now.</p>
+</div>
+<div class="mk-cards"></div>
+<label class="check mk-consent"><input type="checkbox" id="mk-consent"><span>I'm the parent or guardian, or I have permission from the people in these photos to use them.</span></label>
+<div class="mk-actions"><button type="button" class="btn red mk-go">Draw my characters</button><button type="button" class="btn red mk-scenes" hidden>Paint a page with my family</button><button type="button" class="btn ghost btn-sm mk-delete">Delete my photos</button><p class="mk-left small"></p></div>
+<p class="mk-msg" role="status" aria-live="polite"></p>
+<div class="mk-sample" hidden></div>
+<div class="mk-next" hidden><h2>Next: order your books</h2><p>Ordering opens soon. Join the list and we'll email you a {DISCOUNT}% founding-family discount; your characters are kept for 14 days.</p><a class="btn red" href="index.html#join">Join the list</a></div>
+</div></div></section>"""
+    return page("Make your characters | Family Learn to Read", "Turn photos of your child, a grown-up and your pet into the characters of their own reading books. Free preview.",
+                "make.html", body, "", scripts=("readers.js", "family.js", "make.js"))
+
+
+def print_page():
+    """Print files for Lulu (not linked from the site, not indexed): see assets/js/print.js."""
+    return f"""<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta name="referrer" content="no-referrer">
+<title>Print files | Family Learn to Read</title>
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="{FONTS}">
+<link rel="stylesheet" href="{v("css/print.css")}">
+</head>
+<body>
+<p class="status" id="status" role="status">Building the print file…</p>
+<div id="book"></div>
+<script src="{v("js/data.js")}"></script>
+<script src="{v("js/phonics.js")}"></script>
+<script src="{v("js/readers.js")}"></script>
+<script src="{v("js/print.js")}"></script>
+</body>
+</html>
+"""
+
+
 def main():
     if DIST.exists():
         shutil.rmtree(DIST)
     shutil.copytree(ROOT / "assets", DIST / "assets")
     (DIST / "assets/favicon.svg").write_text(FAVICON)
-    pages = {"index.html": home(), "check.html": check(), "schemes.html": schemes()}
+    pages = {"index.html": home(), "books.html": books(3), "make.html": make(), "check.html": check(), "schemes.html": schemes()}
     for name, html in pages.items():
         (DIST / name).write_text(html)
+    (DIST / "print.html").write_text(print_page())  # kept out of the sitemap
     (DIST / "CNAME").write_text(DOMAIN + "\n")
     (DIST / "robots.txt").write_text(f"User-agent: *\nAllow: /\nSitemap: {SITE}/sitemap.xml\n")
     urls = "".join(f"<url><loc>{SITE}/{'' if n == 'index.html' else n}</loc></url>" for n in pages)

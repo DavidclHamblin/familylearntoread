@@ -1,0 +1,105 @@
+/* Family Learn to Read: print files for Lulu (print.html), product "reader".
+   Interior: 32 pages, each 8.75in square = 8.5in trim + 0.125in bleed on every side.
+   Cover (?part=cover): one sheet 441.5 × 222.25mm = back + spine + front, with 3.175mm bleed.
+   Words and faces stay 0.5in inside the trim (0.625in from the page edge). */
+:root {
+  --display: "Bricolage Grotesque", "Avenir Next", "Segoe UI", sans-serif;
+  --body: "Figtree", "Avenir Next", "Segoe UI", sans-serif;
+  --ink: #1E1A33; --red: #EE4B2B; --paper: #FBF6EC; --muted: #6b6478;
+  --bleed: 0.125in; --safe: 0.625in;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; background: #ddd; color: var(--ink); -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+@media print { html, body { background: none; } }
+.status { font: 500 15px/1.4 var(--body); padding: 12px 16px; background: #fff; }
+@media print { .status { display: none; } }
+
+/* ---------- interior ---------- */
+@page interior { size: 8.75in 8.75in; margin: 0; }
+.pg { page: interior; width: 8.75in; height: 8.75in; position: relative; overflow: hidden; background: var(--paper); break-after: page; margin: 0 auto 0.25in; }
+@media print { .pg { margin: 0; } }
+.pg:last-child { break-after: auto; }
+.safe { position: absolute; inset: var(--safe); }
+/* A paperback's gutter needs a little more room. */
+.pg.l .safe { right: 0.8in; } .pg.r .safe { left: 0.8in; }
+h2 { font: 800 26pt/1.05 var(--display); margin: 0; letter-spacing: -0.01em; }
+.lead { font: 500 13pt/1.4 var(--body); color: var(--muted); margin: 0; }
+.badge { display: inline-block; background: var(--bc); color: var(--bi); font: 800 11pt/1 var(--body); letter-spacing: .08em; text-transform: uppercase; padding: 0.08in 0.16in; border-radius: 999px; }
+
+.title-page .safe { display: grid; align-content: center; justify-items: center; text-align: center; gap: 0.2in; }
+.title { font: 800 36pt/1.02 var(--display); letter-spacing: -0.02em; margin: 0; text-wrap: balance; }
+.starring { font: 500 15pt/1.35 var(--display); margin: 0; text-wrap: balance; }
+.title-art { width: 2.6in; height: 3.47in; object-fit: contain; }
+
+.tips-page .safe { display: grid; align-content: center; gap: 0.2in; font: 500 13.5pt/1.5 var(--body); }
+.tips-page ul { margin: 0; padding-left: 1.1em; display: grid; gap: 0.08in; }
+.tips-page p { margin: 0; }
+.belongs { font: 600 15pt/1.4 var(--display) !important; text-align: center; margin-bottom: 0.2in !important; }
+.belongs b { font-size: 26pt; }
+
+.meet-page .safe { display: grid; align-content: center; gap: 0.25in; text-align: center; }
+.cast { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.2in 0.24in; }
+.cast figure { margin: 0; width: 1.9in; }
+.cast img { width: 1.9in; height: 2.53in; object-fit: contain; background: #fff; border-radius: 0.12in; display: block; }
+.cast figcaption { font: 800 16pt/1.2 var(--display); margin-top: 0.08in; color: var(--red); }
+
+/* A spread is one picture across two pages (17.25in × 8.75in with bleed), cut at the fold. */
+.spread-pic { position: absolute; top: 0; width: 17.25in; height: 8.75in; object-fit: cover; object-position: center; }
+.pg.l .spread-pic { left: 0; } .pg.r .spread-pic { left: -8.5in; }
+/* Early readers: big, plain words on a calm panel over the outer third of the spread (painted into the picture). */
+.words { position: absolute; top: 0; bottom: 0; width: 5.475in; padding: var(--safe) 0.55in var(--safe) var(--safe);
+  display: grid; align-content: center; font: 600 30pt/1.5 var(--body); letter-spacing: 0.01em; word-spacing: 0.08em; }
+.pg.l .words { left: 0; }
+.pg.r .words { right: 0; padding: var(--safe) var(--safe) var(--safe) 0.55in; }
+.words p { margin: 0; }
+.words b { color: var(--red); }
+.num { position: absolute; bottom: 0.45in; font: 600 11pt/1 var(--body); color: var(--muted); }
+.num.l { left: 0.6in; } .num.r { right: 0.6in; }
+
+.list-page .safe { display: grid; align-content: start; gap: 0.22in; padding-top: 0.4in; }
+.chips { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 0.16in; }
+.chips li { display: grid; justify-items: center; gap: 0.04in; min-width: 1.15in; padding: 0.14in 0.16in; border-radius: 0.16in; background: #fff; border: 2px solid #EADFC8; }
+.chips b { font: 800 26pt/1 var(--display); color: var(--red); }
+.chips span { font: 500 12pt/1 var(--body); color: var(--muted); }
+.words-list b { color: var(--ink); font-size: 22pt; }
+.talk { margin: 0; padding-left: 1.2em; display: grid; gap: 0.14in; font: 500 16pt/1.4 var(--body); }
+.more { margin: 0; padding: 0; list-style: none; display: grid; gap: 0.1in; font: 700 16pt/1.3 var(--display); }
+.more li::before { content: "★ "; color: #E0A200; }
+
+.cert-page .safe { display: grid; place-items: center; }
+.cert { border: 0.08in solid #FFC21A; border-radius: 0.3in; padding: 0.45in 0.35in; text-align: center; display: grid; gap: 0.12in; justify-items: center; background: #fff; width: 100%; }
+.cert p { margin: 0; font: 500 14pt/1.3 var(--body); }
+.cert .kicker { font: 800 13pt/1 var(--body); letter-spacing: .16em; text-transform: uppercase; color: var(--red); }
+.cert-name { font: 800 30pt/1.1 var(--display) !important; }
+.cert-title { font: 800 20pt/1.2 var(--display) !important; }
+.sign { margin-top: 0.2in !important; color: var(--muted); }
+
+.draw-page .safe { display: grid; grid-template-rows: auto 1fr; gap: 0.2in; }
+.frame { border: 3px dashed #CDBFA4; border-radius: 0.2in; background: #fff; }
+.notes-page .safe { display: grid; grid-template-rows: auto 1fr; gap: 0.2in; }
+.lines { background: repeating-linear-gradient(transparent 0 0.48in, #D9CDB4 0.48in 0.5in); }
+
+.end-page .safe { display: grid; align-content: center; justify-items: center; text-align: center; gap: 0.2in; }
+.the-end { font: 800 40pt/1 var(--display); margin: 0; }
+.made-for { font: 500 14pt/1.4 var(--display); margin: 0; max-width: 4.6in; }
+.brand { display: inline-flex; align-items: center; gap: 0.1in; font: 800 14pt/1 var(--display); }
+.brand svg { width: 0.42in; height: 0.42in; }
+
+/* ---------- cover ---------- */
+@page cover { size: 441.5mm 222.25mm; margin: 0; }
+.cover { page: cover; position: relative; width: var(--sw); height: var(--sh); overflow: hidden; background: var(--cover, #FFC21A); color: var(--ink); margin: 0 auto; }
+.cv-back, .cv-front { position: absolute; top: var(--w); width: 215.9mm; height: 215.9mm; }
+.cv-back { left: var(--w); } .cv-front { right: var(--w); }
+.cv-spine { position: absolute; top: 0; bottom: 0; left: calc(var(--w) + 215.9mm); width: var(--s); background: color-mix(in srgb, var(--cover) 85%, #000); }
+.cv-safe { position: absolute; inset: 12.7mm; display: grid; }
+.cv-front .cv-safe { align-content: space-between; justify-items: center; text-align: center; }
+.cv-kicker { font: 800 12pt/1 var(--body); letter-spacing: .16em; text-transform: uppercase; margin: 0; }
+.cv-title { font: 800 42pt/1 var(--display); letter-spacing: -0.02em; margin: 0; text-wrap: balance; }
+.cv-art { width: 110mm; height: 110mm; border-radius: 50%; background: #fff; display: grid; place-items: center; overflow: hidden; }
+.cv-art img { width: 84%; height: 100%; object-fit: contain; object-position: bottom; }
+.cv-star { font: 700 15pt/1.3 var(--display); margin: 0; text-wrap: balance; }
+.cv-back .cv-safe { align-content: space-between; }
+.cv-blurb { font: 600 18pt/1.4 var(--display); margin: 0; max-width: 150mm; }
+.cv-stage { font: 700 12pt/1 var(--body); letter-spacing: .08em; text-transform: uppercase; margin: 0; }
+.cv-brand { display: grid; gap: 3mm; justify-items: start; }
+.cv-url { font: 600 11pt/1 var(--body); }
