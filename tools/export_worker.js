@@ -8,6 +8,7 @@
 "use strict";
 var fs = require("fs");
 var readers = require("../assets/js/readers.js");
+var layers = require("../assets/js/layers.js");
 var out = process.argv[2];
 if (!out) { console.error("Usage: node tools/export_worker.js <path to worker/src/readers.js>"); process.exit(1); }
 
@@ -27,10 +28,13 @@ var READERS = {};
 readers.forEach(function (b) {
   var roles = {}, scenes = {};
   b.cast.forEach(function (r) { roles[r] = Object.assign({}, ROLES[r]); });
+  var plan = layers.plan(b);
   b.pages.forEach(function (p, i) {
     var desc = p.d.replace(/\{(\w+)\}/g, function (_, r) { return ROLES[r].name; }).replace(/\.$/, "");
-    var cast = b.cast.filter(function (r) { return p.d.indexOf("{" + r + "}") >= 0; });
+    var cast = plan[i].figures.map(function (f) { return f.role; });  // named in the description, or "all three"
     var sc = scenes[i + 1] = { cast: cast, text: i % 2 ? "left" : "right", others: /farmer|museum|stall|fair/.test(p.d), desc: desc };
+    if (cast.length) sc.poses = {};
+    plan[i].figures.forEach(function (f) { sc.poses[f.role] = f.pose; });  // the cut-out pose each character takes (layers.js)
     Object.keys(p.w || {}).forEach(function (r) {  // a different outfit on this page
       var key = "outfit" + (Object.keys(roles[r]).length);
       Object.keys(roles[r]).forEach(function (k) { if (roles[r][k] === p.w[r]) key = k; });

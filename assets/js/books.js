@@ -102,7 +102,7 @@
     b.pages.forEach(function (p, i) {
       var side = i % 2 ? "left" : "right";
       out.push('<div class="bv-page bv-spread side-' + side + '"><div class="bv-pic lr-pic" style="--h:' + (i * 37 % 360) + '"><p class="lr-desc"><span>The picture:</span> ' + fill(p.d, true) +
-        '</p></div><div class="bv-text lr-text"><p>' + fill(p.t) + "</p></div></div>");
+        '</p><canvas class="lr-canvas" width="1600" height="900" data-n="' + i + '" hidden aria-hidden="true"></canvas></div><div class="bv-text lr-text"><p>' + fill(p.t) + "</p></div></div>");
     });
     var s = sounds(b), keys = Object.keys(s.sounds);
     out.push('<div class="bv-page bv-plain lr-sounds"><h3>Sounds in this book</h3><ul class="lr-chips">' + keys.map(function (g) {
@@ -114,9 +114,20 @@
     var list = pages(cur); at = Math.max(0, Math.min(at, list.length - 1));
     stageEl.className = "bv-stage" + (dir ? (dir > 0 ? " turn-fwd" : " turn-back") : "");
     stageEl.innerHTML = list[at];
+    paintPicture();
     count.textContent = at === 0 ? "Cover" : at === 1 ? "Meet the characters" : at === list.length - 1 ? "Sounds and tricky words" : "Page " + (at - 1) + " of " + cur.pages.length;
     dots.innerHTML = list.map(function (x, i) { return '<button type="button" aria-label="Page ' + (i + 1) + '"' + (i === at ? ' aria-current="true"' : "") + ' data-go="' + i + '"></button>'; }).join("");
     bv.querySelector(".bv-title").textContent = fill(cur.title, true).replace(/&amp;/g, "&");
+  }
+  // The painted example: our set for this page with our example family layered on (layers.js). Until a set
+  // is painted, the page keeps its description of the picture.
+  function paintPicture() {
+    var c = stageEl.querySelector(".lr-canvas"), Ly = F.layers;
+    if (!c || !Ly || !F.config || !F.config.api) return;
+    var b = cur, n = +c.getAttribute("data-n"), u = Ly.exampleUrl(F.config.api, b.id);
+    Ly.paint(c, u.scene(n + 1), Ly.plan(b)[n], u.pose).then(function () {
+      if (cur === b && c.isConnected) { c.hidden = false; c.parentNode.classList.add("painted"); }
+    }).catch(function () {});
   }
   function open(id) {
     cur = byId[id]; at = 0; bv.hidden = false; show();
