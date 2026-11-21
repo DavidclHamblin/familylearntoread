@@ -14,14 +14,14 @@ Illustrations on the site are our own placeholders. Customer photos are never pu
 
 ## Stories and the level checker
 
-- `assets/js/readers.js`: the stock stories (10 Stage 3 books so far). `{child}`, `{adult}` and `{pet}` become the family's names.
+- `assets/js/readers.js`: the stock stories (10 Stage 3 Yellow and 10 Stage 4 Blue books so far). `{child}`, `{adult}` and `{pet}` become the family's names.
 - `assets/js/phonics.js`: the level checker (letter groups and tricky words for each stage, word and sentence limits).
 - `node tools/check_stories.js` checks every page at its stage; the build runs it too.
 - `node tools/export_worker.js ../familyboardbooks/worker/src/readers.js` copies the picture prompts into the shared cartoon service.
 
 ## Books, characters and print files
 
-- `books.html` (assets/js/books.js): the Stage 3 library. Look inside any book with your own names, and build a pack
+- `books.html` (Stage 3 Yellow) and `books-blue.html` (Stage 4 Blue), from assets/js/books.js: the stage libraries, with a band switcher. A pack can mix stages. Look inside any book with your own names, and build a pack
   of 1, 5 or 10 different stories, printed or online, with the price (packs of 10, then 5, then singles).
 - `make.html` (assets/js/make.js): photos of the child, the grown-up and the pet (or our stand-ins) are drawn once by
   the shared cartoon service into one draft (book `flr-<first story>`), and one page of the first book is painted free.

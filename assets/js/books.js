@@ -10,7 +10,8 @@
   var root = document.querySelector("[data-library]");
   if (!root || !F.readers) return;
   var stage = +root.getAttribute("data-library"), books = F.readers.filter(function (b) { return b.stage === stage; });
-  var byId = {}; books.forEach(function (b) { byId[b.id] = b; });
+  var byId = {}; F.readers.forEach(function (b) { byId[b.id] = b; });  // a pack can mix stages
+  var band = ((F.stages || []).filter(function (s) { return s.n === stage; })[0] || {}).band || "";
 
   // ---------- names ----------
   var names = F.loadNames();
@@ -92,7 +93,7 @@
   F.bookSounds = sounds;
   function pages(b) {
     var out = [];
-    out.push('<div class="bv-page bv-cover lr-cover"><p class="bv-kicker">Stage ' + b.stage + " · Yellow</p><h3>" + fill(b.title, true) + '</h3><p class="bv-sub">Starring ' +
+    out.push('<div class="bv-page bv-cover lr-cover"><p class="bv-kicker">Stage ' + b.stage + " · " + esc(band) + "</p><h3>" + fill(b.title, true) + '</h3><p class="bv-sub">Starring ' +
       b.cast.map(function (k) { return esc(name(k)); }).join(", ").replace(/, ([^,]*)$/, " and $1") + "</p></div>");
     out.push('<div class="bv-page bv-meet"><h3>Meet the characters</h3><div class="bv-cast lr-cast">' + b.cast.map(function (k) {
       var r = F.readerRoles.filter(function (x) { return x.key === k; })[0];
