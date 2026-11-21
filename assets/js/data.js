@@ -23,18 +23,20 @@ FLR.regions = {
   eu: { id: "eu", label: "EU · €", name: "Europe", currency: "€", notice: "" }
 };
 
-/* Everything is sold in packs of 5 books, either printed or online only.
-   Prices are in euros; UK prices in pounds come from the fixed table FLR.gbp, keyed by the euro price.
-   Provisional until the printer quotes. Keep them the same as the prices in Shopify once products exist. */
+/* Books are sold one at a time, or in packs of 5 or 10 different stories, either printed or online only.
+   "sizes" maps the number of books to the price. Prices are in euros; UK prices in pounds come from the fixed
+   table FLR.gbp, keyed by the euro price. Provisional until packs ship as one parcel and the printer's pack postage
+   is known (one 8.5 in square, 32-page paperback costs about €4.67 to print, plus postage).
+   Keep them the same as the prices in Shopify once products exist. */
 FLR.prices = {
-  printed: { name: "Printed pack", price: 45, what: "5 paperback books, posted to you",
-             detail: "Five short paperback readers with your family as the characters, plus the online versions free." },
-  online: { name: "Online pack", price: 19, what: "5 books to read on screen",
-            detail: "The same five books on a private page, for a phone, tablet or computer. Yours to keep reading." },
-  own: { name: "Write your own story", price: 12, what: "Added to a pack, per book",
+  printed: { name: "Printed books", sizes: { 1: 15, 5: 45, 10: 85 }, what: "Paperback books, posted to you",
+             detail: "Short square paperbacks with your family as the characters, plus the online versions free." },
+  online: { name: "Online books", sizes: { 1: 5, 5: 19, 10: 35 }, what: "Books to read on screen",
+            detail: "The same books on a private page, for a phone, tablet or computer. Yours to keep reading." },
+  own: { name: "Write your own story", price: 12, what: "Added to an order, per book",
          detail: "Tell us an idea and we write it at your child's stage, checked word by word. Coming after launch." }
 };
-FLR.gbp = { 45: 39, 19: 16, 12: 10 };
+FLR.gbp = { 5: 4, 12: 10, 15: 13, 19: 16, 35: 30, 45: 39, 85: 74 };
 
 /* Our eight reading stages, each tied to a Book Band colour, a phonics phase and a school year.
    "sample" is a short passage for the free reading check: our own words, written to that stage. */

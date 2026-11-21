@@ -11,3 +11,10 @@ Website for www.familylearntoread.com: early reading books and phonics books wit
 Stage 1 is a coming-soon site with a waitlist (FormSubmit, emails hello@familyboardbooks.com). Nothing uses the shared photo and cartoon service yet.
 Reading scheme names appear only as plain text in the stage finder and on the schemes page, with a "not connected with any publisher" line. Never in product names, book text, ads or ad keywords.
 Illustrations on the site are our own placeholders. Customer photos are never published here.
+
+## Stories and the level checker
+
+- `assets/js/readers.js`: the stock stories (10 Stage 3 books so far). `{child}`, `{adult}` and `{pet}` become the family's names.
+- `assets/js/phonics.js`: the level checker (letter groups and tricky words for each stage, word and sentence limits).
+- `node tools/check_stories.js` checks every page at its stage; the build runs it too.
+- `node tools/export_worker.js ../familyboardbooks/worker/src/readers.js` copies the picture prompts into the shared cartoon service.
