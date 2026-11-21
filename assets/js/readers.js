@@ -6,8 +6,15 @@
    tools/check_stories.js checks every page at its stage; run it after any change. */
 var FLR = (typeof window !== "undefined" ? (window.FLR = window.FLR || {}) : {});
 
+/* The parts in every book. A family with no pet can use our own stand-in pet. */
+FLR.readerRoles = [
+  { key: "child", name: "The reader", who: "Your child", label: "Your child's name", example: "Sam", required: true },
+  { key: "adult", name: "The grown-up", who: "Mum, Dad, Gran or anyone who reads with them", label: "What your child calls them", example: "Mum", required: true },
+  { key: "pet", name: "The pet", who: "Your pet, or our stand-in dog", label: "The pet's name", example: "Biscuit" }
+];
+
 FLR.readers = [
-  { id: "s3-rain", stage: 3, title: "Fun in the rain", cast: ["child", "adult", "pet"], pages: [
+  { id: "s3-rain", stage: 3, title: "Fun in the rain", blurb: "Dark clouds, a big hat and lots of mud. Rain is fun!", cast: ["child", "adult", "pet"], pages: [
     { w: { child: "a bright red raincoat with the hood down, blue jeans and red wellington boots" }, t: "It is dark. Rain will fall soon. {child} gets a red coat.", d: "{child} pulls on a red raincoat by the front door while dark clouds gather outside the window; {adult} and {pet} watch." },
     { w: { child: "a bright red raincoat with the hood down, blue jeans and red wellington boots" }, t: "{adult} gets a big hat and {pet} gets wet!", d: "{adult} puts on a huge floppy rain hat; {pet} stands in the open doorway already dripping." },
     { w: { child: "a bright red raincoat with the hood down, blue jeans and red wellington boots" }, t: "Rain hits the roof. Tap, tap, tap!", d: "A cosy house seen from outside, big raindrops bouncing off the roof, {child} looking up from the window." },
@@ -19,7 +26,7 @@ FLR.readers = [
     { w: { child: "a bright red raincoat with the hood down, blue jeans and red wellington boots" }, t: "Then the sun is up. The rain has gone.", d: "The sun breaks through the clouds, a rainbow over the garden, everything shining and wet." },
     { t: "{child}, {adult} and {pet} go back in. Mud, mud, mud! A bath for all!", d: "Back indoors, all three are covered in mud; a bubbly bath waits through the bathroom door." }
   ]},
-  { id: "s3-fish", stage: 3, title: "The big fish", cast: ["child", "adult", "pet"], pages: [
+  { id: "s3-fish", stage: 3, title: "The big fish", blurb: "There is a big fish in the park pool. Can {child} get it with a net?", cast: ["child", "adult", "pet"], pages: [
     { t: "{child} and {adult} go to the pool in the park.", d: "{child} and {adult} walk through a sunny park towards a small pond with reeds." },
     { t: "{pet} will go too.", d: "{pet} trots behind them with its tail high." },
     { t: "{child} has a net and a jar.", d: "{child} holds up a little fishing net and an empty glass jar, grinning." },
@@ -31,7 +38,7 @@ FLR.readers = [
     { t: "Then {pet} falls in the pool. {pet} is wet!", d: "{pet} tumbles into the shallow pond with a big splash; the fish swims off." },
     { t: "{adult} gets {pet} back. No fish, but lots of fun!", d: "{adult} lifts a soggy {pet} out of the water while {child} laughs." }
   ]},
-  { id: "s3-owl", stage: 3, title: "The night owl", cast: ["child", "adult", "pet"], pages: [
+  { id: "s3-owl", stage: 3, title: "The night owl", blurb: "Hoot, hoot! Who is in the garden at night?", cast: ["child", "adult", "pet"], pages: [
     { w: { child: "cosy blue pyjamas with little stars and slippers" }, t: "It is night. {child} is in bed. {child} hears a hoot.", d: "{child} in bed at night, eyes open, moonlight through the curtains." },
     { w: { child: "cosy blue pyjamas with little stars and slippers" }, t: "Hoot, hoot! {child} gets up to look.", d: "{child} climbs out of bed in pyjamas and tiptoes to the window." },
     { w: { child: "cosy blue pyjamas with little stars and slippers" }, t: "{adult} gets a torch. {child} and {adult} go to the garden.", d: "{adult} holds a torch; {child} and {adult} step quietly into the dark garden." },
@@ -43,7 +50,7 @@ FLR.readers = [
     { w: { child: "cosy blue pyjamas with little stars and slippers" }, t: "Then the owl gets up and is off into the night.", d: "The owl flies across the moon, wings wide." },
     { w: { child: "cosy blue pyjamas with little stars and slippers" }, t: "{child} gets back in bed. Hoot, hoot! Good night!", d: "{child} snuggled back in bed, smiling sleepily; the owl is a small shape on the moon outside." }
   ]},
-  { id: "s3-farm", stage: 3, title: "Fun at the farm", cast: ["child", "adult", "pet"], pages: [
+  { id: "s3-farm", stage: 3, title: "Fun at the farm", blurb: "Cows, pigs, chicks, a cheeky goat and a big horse to sit on.", cast: ["child", "adult", "pet"], pages: [
     { t: "{child}, {adult} and {pet} go to a farm.", d: "{child}, {adult} and {pet} arrive at a farm gate with a red barn behind." },
     { t: "A cow is in the shed. Moo! Moo!", d: "A friendly black and white cow pokes its head out of a shed." },
     { t: "A pig is in the mud. {pet} sees the pig.", d: "A pink pig wallows in mud; {pet} stares at it from the fence." },
@@ -55,7 +62,7 @@ FLR.readers = [
     { t: "{child} sits high up on the horse. Look at me!", d: "{child} sits proudly on the horse, waving; {adult} and {pet} look up." },
     { t: "Then it is dark. Good night, farm! Good night, all!", d: "Sunset over the farm; the animals settle down as the family waves goodbye." }
   ]},
-  { id: "s3-dig", stage: 3, title: "The big dig", cast: ["child", "adult", "pet"], pages: [
+  { id: "s3-dig", stage: 3, title: "The big dig", blurb: "{child} and {pet} dig in the garden and find a coin from long ago.", cast: ["child", "adult", "pet"], pages: [
     { t: "{child} and {pet} dig in the garden.", d: "{child} with a small spade and a red bucket, {pet} beside, in a garden vegetable patch." },
     { t: "Dig, dig, dig! Soil is on {child}'s feet.", d: "{child} digs hard, soil flying, feet covered in earth." },
     { t: "{pet} digs too. {pet} digs a big pit.", d: "{pet} digs a deep hole with soil spraying out behind." },
@@ -67,7 +74,7 @@ FLR.readers = [
     { t: "{child} puts the coin in a box.", d: "{child} carefully places the coin in a little wooden box lined with cloth." },
     { t: "The coin and the pot go to the town. Now all can see them!", d: "In a small town museum, the coin and pot sit in a glass case; {child} and {pet} look proud." }
   ]},
-  { id: "s3-moon", stage: 3, title: "Zoom to the moon", cast: ["child", "adult", "pet"], pages: [
+  { id: "s3-moon", stage: 3, title: "Zoom to the moon", blurb: "A box becomes a rocket, and the moon has a shy little bug.", cast: ["child", "adult", "pet"], pages: [
     { t: "{child} and {pet} get in a box. It is a rocket!", d: "{child} and {pet} sit in a big cardboard box painted like a rocket, in the garden." },
     { t: "Get set. Zoom! Up, up, up!", d: "Imagination: the cardboard rocket blasts off into the sky with a trail of stars." },
     { t: "The rocket zooms up high. Look at the moon!", d: "The rocket flies through space towards a big smiling grey moon." },
@@ -79,7 +86,7 @@ FLR.readers = [
     { t: "Then {child} hears {adult}. Food is on! Back to the rocket!", d: "A faint voice from Earth; {child} and {pet} hurry back to the rocket." },
     { t: "Zoom! The rocket is back in the garden. Yum, food!", d: "Back in the garden in the cardboard box; {adult} holds out a plate of food, smiling." }
   ]},
-  { id: "s3-sheep", stage: 3, title: "Sheep on the road", cast: ["child", "adult", "pet"], pages: [
+  { id: "s3-sheep", stage: 3, title: "Sheep on the road", blurb: "The car has to wait. There are sheep on the road!", cast: ["child", "adult", "pet"], pages: [
     { t: "{child} and {adult} go up the hill in the car. {pet} is in the car too.", d: "A small car winds up a green hill; {child}, {adult} and {pet} inside." },
     { t: "The car has to wait. Sheep are on the road!", d: "The car stops; the road ahead is full of woolly sheep." },
     { t: "Ten sheep! Then a lot of sheep!", d: "More and more sheep pour onto the road from a gap in the wall." },
@@ -91,7 +98,7 @@ FLR.readers = [
     { t: "A farmer is on the hill. Go up, sheep!", d: "A farmer in a flat cap appears on the hill and waves a crook." },
     { t: "The six sheep go up the hill. Then the car can go too.", d: "The last six sheep follow the farmer; the car drives on, everyone waving." }
   ]},
-  { id: "s3-chips", stage: 3, title: "Fish and chips", cast: ["child", "adult", "pet"], pages: [
+  { id: "s3-chips", stage: 3, title: "Fish and chips", blurb: "Fish and chips on the wall, and a gull that wants a chip.", cast: ["child", "adult", "pet"], pages: [
     { t: "{child}, {adult} and {pet} go to the chip shop.", d: "A bright seaside chip shop; {child}, {adult} and {pet} walk in." },
     { t: "The chip shop is hot. Chips hiss in the fat.", d: "Behind the counter, chips sizzle in a big fryer with steam rising." },
     { t: "{child} gets fish and chips. {adult} gets a hot dog.", d: "{child} holds a paper parcel of fish and chips; {adult} holds a hot dog." },
@@ -103,7 +110,7 @@ FLR.readers = [
     { t: "{pet} barks. Woof! The gulls are off!", d: "{pet} barks bravely; the gulls fly off in a flurry of feathers." },
     { t: "{child} and {pet} sit on the wall. The chips are good, but hot!", d: "{child} and {pet} share the chips in peace, sea and sunset behind." }
   ]},
-  { id: "s3-fair", stage: 3, title: "Fun at the fair", cast: ["child", "adult"], pages: [
+  { id: "s3-fair", stage: 3, title: "Fun at the fair", blurb: "Lights, a red horse, a big red bear and a car that zooms down.", cast: ["child", "adult"], pages: [
     { t: "{child} and {adult} go to the fair.", d: "{child} and {adult} arrive at a funfair at dusk, lights twinkling." },
     { t: "The fair has lots of lights. Look at them!", d: "A wide view of the fair: rides, stalls and strings of coloured lights." },
     { t: "{child} sits on a red horse. Up and down, up and down!", d: "{child} rides a red horse on a merry-go-round, grinning." },
@@ -115,7 +122,7 @@ FLR.readers = [
     { t: "{adult} gets a hot dog. {child} gets a fizzy pop.", d: "At a food stall, {adult} with a hot dog and {child} with a fizzy drink." },
     { t: "It is dark. {child} and the red bear go to bed.", d: "{child} asleep in bed hugging the red bear, fair lights far away through the window." }
   ]},
-  { id: "s3-boat", stage: 3, title: "The red boat", cast: ["child", "adult", "pet"], pages: [
+  { id: "s3-boat", stage: 3, title: "The red boat", blurb: "A red boat, a duck with six chicks, and rain on the lake.", cast: ["child", "adult", "pet"], pages: [
     { t: "{child} and {adult} get in a boat. {pet} gets in too.", d: "A little red rowing boat at a lake jetty; {child}, {adult} and {pet} climb in." },
     { t: "{adult} pulls hard on the oars. {child} looks for fish.", d: "{adult} rows; {child} leans over the side looking into the water." },
     { t: "The boat bobs up and down on the lake.", d: "The red boat bobs on gentle ripples in the middle of a lake with hills around." },
