@@ -78,7 +78,7 @@ def footer():
     return f"""<footer class="site-foot"><div class="wrap foot-grid">
 <div style="display:grid;gap:10px;max-width:380px"><a class="logo" href="index.html">{LOGO}Family Learn to Read</a>
 <p class="small">Early reading books and phonics books with your family as the characters, for ages 4 to 7.</p></div>
-<div style="display:grid;gap:12px"><div class="foot-links"><a href="index.html#stages">Stages</a><a href="books.html">Yellow books</a><a href="make.html">Make your characters</a><a href="index.html#sounds">Sound packs</a><a href="check.html">Reading check</a><a href="schemes.html">School schemes</a><a href="index.html#faq">FAQ</a><a href="index.html#faq-privacy">Photo privacy</a><a href="mailto:{CFG["email"]}">Contact</a></div>
+<div style="display:grid;gap:12px"><div class="foot-links"><a href="index.html#stages">Stages</a><a href="books.html">Yellow books</a><a href="books-blue.html">Blue books</a><a href="make.html">Make your characters</a><a href="index.html#sounds">Sound packs</a><a href="check.html">Reading check</a><a href="schemes.html">School schemes</a><a href="index.html#faq">FAQ</a><a href="index.html#faq-privacy">Photo privacy</a><a href="mailto:{CFG["email"]}">Contact</a></div>
 <div class="foot-links"><a href="{CFG["storybooks"]}">Family Storybooks</a><a href="{CFG["boardBooks"]}">Family Board Books</a></div>
 <p class="small">&copy; <span data-year>2026</span> Family Learn to Read &middot; familylearntoread.com &middot; part of <a href="{CFG["umbrella"]}">Our Family Presents</a></p>
 <p class="small" style="max-width:62ch">{e(NOT_CONNECTED)}</p></div>
@@ -139,7 +139,7 @@ def stage_card(s):
 <div class="stage-top"><span class="stage-n">Stage {s["n"]}</span><span class="stage-band">{e(s["band"])} band</span></div>
 <p class="stage-what">{e(s["what"])}</p>
 <dl class="stage-facts"><div><dt>School year</dt><dd>{e(s["year"])}</dd></div><div><dt>Phonics</dt><dd>{e(s["phase"])}</dd></div><div><dt>Words</dt><dd>{e(s["text"])}</dd></div></dl>
-{f'<a class="stage-cta" href="books.html">See the {len([b for b in READERS if b["stage"] == s["n"]])} books &rarr;</a>' if any(b["stage"] == s["n"] for b in READERS) else f'<a class="stage-cta" href="#join" data-want="stage-{s["n"]}">Notify me &rarr;</a>'}
+{f'<a class="stage-cta" href="{books_file(s["n"])}">See the {len([b for b in READERS if b["stage"] == s["n"]])} books &rarr;</a>' if any(b["stage"] == s["n"] for b in READERS) else f'<a class="stage-cta" href="#join" data-want="stage-{s["n"]}">Notify me &rarr;</a>'}
 </article>"""
 
 
@@ -338,7 +338,11 @@ def schemes():
                 "schemes.html", body, "", scripts=("finder.js",))
 
 
-# ---------- Books (Stage 3 library and pack builder) ----------
+# ---------- Books (a stage library and pack builder) ----------
+def books_file(stage):
+    return "books.html" if stage == 3 else f"books-{[x for x in STAGES if x['n'] == stage][0]['band'].lower()}.html"
+
+
 def books(stage=3):
     st = [x for x in STAGES if x["n"] == stage][0]
     roles = [r for r in json.loads(subprocess.check_output(["node", "-e", "global.window={FLR:{}};require(process.argv[1]);console.log(JSON.stringify(window.FLR.readerRoles))", str(ROOT / "assets/js/readers.js")]))]
@@ -347,6 +351,8 @@ def books(stage=3):
     body = f"""<section class="section" style="--bc:{st["color"]};padding-bottom:24px"><div class="wrap">
 <div class="sec-head"><p class="eyebrow">Stage {stage} · {e(st["band"])} band · {e(st["phase"])}</p><h1>{e(st["band"])} books</h1>
 <p class="lede">Ten short stories for children reading at Stage {stage}: {e(st["what"][0].lower() + st["what"][1:])} Every word is checked against the sounds and tricky words taught by this stage, and your family are the characters on every page.</p></div>
+<nav class="lib-stages" aria-label="Book bands">{"".join(f'<a class="badge" style="--bc:{x["color"]};--bi:{x["ink"]}" href="{books_file(x["n"])}"{' aria-current="page"' if x["n"] == stage else ""}>Stage {x["n"]} · {e(x["band"])}</a>' for x in STAGES if any(b["stage"] == x["n"] for b in READERS))}</nav>
+<p class="small muted">A pack can mix books from different stages, so you can add a few from the next band to grow into.</p>
 <div data-library="{stage}" class="lib">
 <details class="bv-names" open><summary>Read them with your names</summary><div class="bv-name-grid">{names}</div></details>
 <div class="lib-cards"></div>
@@ -367,7 +373,7 @@ def books(stage=3):
 </div></div></section>"""
     return page(f"{st['band']} reading books with your family | Family Learn to Read",
                 f"Ten personalised Stage {stage} ({st['band']} band) reading books, every word checked for your child's phonics stage. Buy one, or packs of 5 or 10.",
-                "books.html", body, "books", scripts=("phonics.js", "readers.js", "family.js", "books.js"))
+                books_file(stage), body, "books", scripts=("phonics.js", "readers.js", "family.js", "books.js"))
 
 
 GUIDE_GOOD = ["A recent photo, in good daylight", "Face to the camera, with the face nice and big", "Eyes clearly visible: no sunglasses or hats pulled low", "Just them in the photo", "For a pet: the whole animal, side on, is ideal"]
@@ -430,7 +436,7 @@ def main():
         shutil.rmtree(DIST)
     shutil.copytree(ROOT / "assets", DIST / "assets")
     (DIST / "assets/favicon.svg").write_text(FAVICON)
-    pages = {"index.html": home(), "books.html": books(3), "make.html": make(), "check.html": check(), "schemes.html": schemes()}
+    pages = {"index.html": home(), "books.html": books(3), "books-blue.html": books(4), "make.html": make(), "check.html": check(), "schemes.html": schemes()}
     for name, html in pages.items():
         (DIST / name).write_text(html)
     (DIST / "print.html").write_text(print_page())  # kept out of the sitemap

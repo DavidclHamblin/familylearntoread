@@ -632,3 +632,8 @@ textarea { min-height: 90px; resize: vertical; }
 .mk-next { display: grid; gap: 10px; justify-items: start; padding: 20px; border-radius: var(--r); background: var(--surface); border: 2px solid var(--line); }
 .mk-next h2 { margin: 0; font-size: 24px; }
 .mk-next p { margin: 0; }
+
+/* Band switcher on the book pages */
+.lib-stages { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 8px; }
+.lib-stages a { display: inline-block; padding: 8px 14px; border-radius: 999px; border: 2px solid var(--bc); color: inherit; font-weight: 700; text-decoration: none; }
+.lib-stages a[aria-current] { background: var(--bc); color: var(--bi); }

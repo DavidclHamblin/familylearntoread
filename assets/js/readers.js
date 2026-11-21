@@ -133,6 +133,126 @@ FLR.readers = [
     { w: { child: "a yellow raincoat over the usual clothes" }, t: "{adult} turns the boat back. The boat hits a rock. Thud!", d: "The boat bumps a rock near the shore; everyone wobbles." },
     { w: { child: "a yellow raincoat over the usual clothes" }, t: "Is the boat all right? Yes, it is!", d: "{child} checks the side of the boat; no damage, everyone smiles." },
     { w: { child: "a yellow raincoat over the usual clothes" }, t: "Back at the dock. Wet, but good fun!", d: "Back at the jetty, all three drip and laugh; the rain stops and the sun comes out." }
+  ]},
+  { id: "s4-tent", stage: 4, title: "The tent in the garden", blurb: "A tent, a torch and a night in the garden. But what is that sound?", cast: ["child", "adult", "pet"], pages: [
+    { t: "{child} and {adult} got the tent out of the shed. \"Can we camp in the garden?\" said {child}.", d: "{child} and {adult} pull a rolled-up green tent out of a garden shed on a sunny afternoon; {pet} watches." },
+    { t: "{adult} held the poles and {child} hammered the pegs in. Bang, bang, bang! The tent went up.", d: "{child} hammers a tent peg with a little mallet while {adult} holds up the tent poles; the tent is half up." },
+    { t: "{child} got a sleeping bag, a torch and a big pillow. {pet} got in the tent too.", d: "Inside the little tent: a sleeping bag, a torch and a big pillow; {pet} has already curled up on the pillow." },
+    { t: "When it got dark, {adult} lit a lamp. They had hot milk and a snack in the tent.", d: "Dusk in the garden; {adult} and {child} sit in the open tent with a glowing lantern, mugs of hot milk and a plate of biscuits." },
+    { t: "Then {child} said, \"I can hear a sound. What is it?\" Crack! Crunch!", d: "Night; {child} sits up in the sleeping bag, eyes wide, holding a torch, listening; shadows of plants on the tent wall." },
+    { t: "{adult} got the torch and they went to look. The grass was wet and black.", d: "{child} and {adult} creep across the dark lawn, the torch beam lighting up wet grass." },
+    { t: "It was not a monster. It was a hedgehog, munching on a snack in the grass!", d: "The torch beam shows a small hedgehog nibbling in the grass; {child} smiles in surprise." },
+    { t: "The hedgehog did not run off. It looked up at {child} and sniffed.", d: "Close-up: the hedgehog looks up at {child}, nose twitching; {child} kneels and keeps very still." },
+    { t: "\"Shh, {pet},\" said {child}. \"Do not scare it. It is just a little hedgehog.\"", d: "{child} gently holds {pet} back; the hedgehog trundles off into a flower bed." },
+    { t: "Back in the tent, {child} fell asleep with {pet}. What a fun night in the garden!", d: "The tent glowing softly at night; inside, {child} and {pet} asleep together; the moon and stars above the garden." }
+  ]},
+  { id: "s4-snow", stage: 4, title: "Snow day", blurb: "It snowed in the night! Time for a sledge, a snowman and a snowball or two.", cast: ["child", "adult", "pet"], pages: [
+    { w: { child: "a red woolly hat, a thick blue winter coat, mittens and black snow boots" }, t: "{child} looked out of the window. \"Snow!\" said {child}. \"Can we go out and play?\"", d: "{child} in pyjamas presses their nose to a frosty window; outside, the garden is deep in fresh snow." },
+    { w: { child: "a red woolly hat, a thick blue winter coat, mittens and black snow boots" }, t: "{child} got a hat, a scarf and a big coat. {adult} got the sledge from the shed.", d: "{child} now in a red woolly hat, scarf and coat; {adult} carries a wooden sledge out of the shed." },
+    { w: { child: "a red woolly hat, a thick blue winter coat, mittens and black snow boots" }, t: "They went up the hill in the park. The snow was thick and soft.", d: "{child} and {adult} trudge up a snowy hill pulling the sledge; {pet} bounds ahead in the snow." },
+    { w: { child: "a red woolly hat, a thick blue winter coat, mittens and black snow boots" }, t: "{child} sat on the sledge and {adult} gave it a push. Zoom! Down the hill it went.", d: "{child} whizzes down the snowy hill on the sledge, arms up and laughing; {adult} waves from the top." },
+    { w: { child: "a red woolly hat, a thick blue winter coat, mittens and black snow boots" }, t: "{pet} ran after the sledge and jumped in the snow. Then {pet} was a snow dog!", d: "{pet} leaps into a snowdrift and comes out covered in white snow from nose to tail." },
+    { w: { child: "a red woolly hat, a thick blue winter coat, mittens and black snow boots" }, t: "Next, they rolled a big snowball and then a little one. It was a snowman!", d: "{child} and {adult} roll two big snowballs; a snowman is taking shape." },
+    { w: { child: "a red woolly hat, a thick blue winter coat, mittens and black snow boots" }, t: "{child} gave the snowman a carrot nose and a hat. \"He needs a scarf,\" said {child}.", d: "{child} pushes a carrot nose into the snowman's face; it wears an old hat and two pebble eyes." },
+    { w: { child: "a red woolly hat, a thick blue winter coat, mittens and black snow boots" }, t: "Then {adult} got hit with a snowball. Splat! \"Who did that?\" said {adult}.", d: "A snowball bursts on {adult}'s shoulder; {adult} spins round, pretending to be cross; {child} hides behind the snowman, giggling." },
+    { w: { child: "a red woolly hat, a thick blue winter coat, mittens and black snow boots" }, t: "{child} ran and {adult} ran too. Snowballs went up and down and all over the park!", d: "A happy snowball fight in the park, snowballs flying; {pet} chases them." },
+    { t: "Back at home, they had hot chocolate. Their hands and feet were cold. But it was the best day!", d: "In a cosy kitchen, {child} and {adult} wrapped in blankets sip hot chocolate; wet mittens dry on the radiator; {pet} snoozes." }
+  ]},
+  { id: "s4-shells", stage: 4, title: "Sand and shells", blurb: "Sandcastles, rock pools and a crab that likes to nip.", cast: ["child", "adult", "pet"], pages: [
+    { t: "{child}, {adult} and {pet} went to the coast. The sun was hot and the sand was soft.", d: "A sunny sandy beach with gentle waves; {child}, {adult} and {pet} arrive carrying a bucket, spade and towels." },
+    { t: "{child} dug in the sand with a spade. \"I will make a sandcastle,\" said {child}.", d: "{child} kneels and digs in the sand with a spade, a red bucket beside them." },
+    { t: "{child} filled the bucket and tipped it up. One, two, three, a big sandcastle!", d: "{child} lifts the bucket off a perfect sandcastle; two more stand next to it." },
+    { t: "{adult} said, \"Let us look for shells.\" They went along the sand to the rocks.", d: "{child} and {adult} walk along the shoreline towards some rocks, looking down for shells." },
+    { t: "{child} got a pink shell and a long thin shell. Then {child} got a shell with a hole in it.", d: "{child} holds out three shells in a cupped hand: a pink one, a long thin one and one with a hole." },
+    { t: "In a rock pool, {child} spotted a crab. It was a little red crab with big claws.", d: "Looking into a clear rock pool: a small red crab with raised claws, seaweed around it; {child} points." },
+    { t: "{pet} put a nose in the pool. Snip! The crab nipped {pet} on the nose!", d: "The crab pinches {pet}'s nose; {pet} jumps back with a startled face." },
+    { t: "{pet} ran off and jumped into the sea. Splash! {child} and {adult} had to grin.", d: "{pet} splashes into the shallow waves; {child} and {adult} laugh on the sand." },
+    { t: "When they got back, the sea had come up. The sandcastles were gone!", d: "The tide has washed over the place where the sandcastles were; only a flat bump and the red bucket remain; {child} looks surprised." },
+    { t: "\"It did not want the sandcastles,\" said {adult}. \"It just wanted to splash them!\" They all went home with the shells.", d: "Evening at the beach; {child}, {adult} and {pet} walk home, {child} holding the shells, a pink sunset over the sea." }
+  ]},
+  { id: "s4-bus", stage: 4, title: "The bus trip", blurb: "A ride on the top of the bus, all the way to the end of the line.", cast: ["child", "adult"], pages: [
+    { t: "{child} and {adult} went to the bus stop. \"Can we sit on the top?\" said {child}.", d: "A bus stop on a town street; {child} and {adult} wait as a red double-decker bus comes round the corner." },
+    { t: "The bus stopped and {adult} held out the tickets. Then they ran up the steps to the top.", d: "{adult} shows tickets to a smiling bus driver; {child} is already heading for the stairs." },
+    { t: "They sat at the front. {child} felt like the driver of the bus!", d: "{child} sits at the big front window on the top deck of the bus, hands out like steering a wheel; {adult} beside them." },
+    { t: "The bus went past the shops and the park. {child} spotted a dog in a red coat.", d: "View from the top deck: shops, a park and a small dog in a red coat walking on the pavement." },
+    { t: "Then the bus went up a hill. It went slow, slow, slow. It was a steep hill!", d: "The bus climbs a steep hill; inside, {child} leans forward as if to help it." },
+    { t: "At the top of the hill, {child} could see the whole town. \"There is our flat!\" said {child}.", d: "From the top deck: a wide view of a little town; {child} points at a block of flats in the distance." },
+    { t: "The bus stopped at the end of the line. It was a big park with a pond.", d: "The bus at its last stop beside a large park with a pond and ducks; {child} and {adult} step off." },
+    { t: "{child} and {adult} had a picnic on the grass. They had rolls, crisps and a drink.", d: "{child} and {adult} sit on a picnic blanket on the grass with sandwiches, crisps and drinks, ducks nearby." },
+    { t: "Then it was time to get the bus back. {child} ran to get the front seat.", d: "{child} runs up the stairs of the bus to grab the front seat on the top deck again." },
+    { t: "On the trip back, {child} fell asleep. \"What a long trip,\" said {adult} with a grin.", d: "Late afternoon light on the top deck; {child} asleep against {adult}'s arm; {adult} smiles." }
+  ]},
+  { id: "s4-tarts", stage: 4, title: "The jam tarts", blurb: "Twelve jam tarts on the table. But one has gone missing!", cast: ["child", "adult", "pet"], pages: [
+    { t: "{child} and {adult} got the flour, the butter and the jam. \"Let us make jam tarts,\" said {adult}.", d: "A kitchen counter with flour, butter, a jar of strawberry jam and a mixing bowl; {child} and {adult} tie on aprons." },
+    { w: { child: "a yellow T-shirt and jeans with a red striped apron, a little flour on the nose" }, t: "{child} mixed and mixed. Then {child} rolled it flat with a rolling pin.", d: "{child} rolls out pastry with a rolling pin, flour everywhere; {pet} watches from the floor." },
+    { w: { child: "a yellow T-shirt and jeans with a red striped apron, a little flour on the nose" }, t: "{adult} cut out the circles. {child} put a blob of jam in each one.", d: "{child} spoons jam into pastry cases in a tart tin; {adult} cuts circles with a cutter." },
+    { w: { child: "a yellow T-shirt and jeans with a red striped apron, a little flour on the nose" }, t: "The tarts went in the oven. After a little wait, the kitchen smelt so good!", d: "{child} peers through the oven door at the tarts baking; a warm glow from the oven." },
+    { w: { child: "a yellow T-shirt and jeans with a red striped apron, a little flour on the nose" }, t: "{adult} put twelve hot jam tarts on the table. \"Let them cool,\" said {adult}.", d: "Twelve golden jam tarts cool on a rack on the kitchen table." },
+    { w: { child: "a yellow T-shirt and jeans with a red striped apron, a little flour on the nose" }, t: "{child} and {adult} went to wash up. When they got back, {child} counted the tarts.", d: "{child} points at the tarts one by one, counting; {adult} dries a bowl." },
+    { w: { child: "a yellow T-shirt and jeans with a red striped apron, a little flour on the nose" }, t: "\"One, two, three... eleven! One tart has gone!\" said {child}. \"Who has it?\"", d: "{child} looks shocked at the cooling rack: there is an empty gap where one tart was." },
+    { w: { child: "a yellow T-shirt and jeans with a red striped apron, a little flour on the nose" }, t: "{adult} did not have it. {child} did not have it. Then they looked at {pet}.", d: "{child} and {adult} turn slowly to look at {pet}, who sits very still, trying to look innocent." },
+    { w: { child: "a yellow T-shirt and jeans with a red striped apron, a little flour on the nose" }, t: "{pet} had red jam on the chin! \"You had the tart!\" said {child}.", d: "Close-up of {pet} with a blob of red jam on the chin and a guilty look." },
+    { t: "{adult} said, \"Never mind. There are eleven left!\" And they had a jam tart each.", d: "{child} and {adult} sit at the table eating jam tarts and laughing; {pet} licks its lips under the table." }
+  ]},
+  { id: "s4-frog", stage: 4, title: "Frog in the pond", blurb: "A little green frog sits on a lily pad. Can it jump to the bank?", cast: ["child", "adult", "pet"], pages: [
+    { t: "{child} and {adult} went to the pond in the park. {pet} ran on in front.", d: "A green park with a reedy pond; {pet} runs ahead of {child} and {adult} along the path." },
+    { t: "In the pond, {child} spotted a little green frog. It sat on a big flat lily pad.", d: "A small green frog sits on a large lily pad in the pond; {child} crouches on the bank, pointing." },
+    { t: "\"Look at the frog!\" said {child}. \"It has big eyes and long legs.\"", d: "Close-up of the frog: big golden eyes, long folded legs, shiny green skin." },
+    { t: "The frog went, \"Croak!\" Then it jumped to the next lily pad. Plop!", d: "The frog leaps from one lily pad to another with a little splash." },
+    { t: "{pet} wanted to get the frog. {pet} went splash into the pond!", d: "{pet} jumps into the edge of the pond after the frog, sending up a big splash." },
+    { t: "The frog was quick. It jumped onto a log and hid in the reeds.", d: "The frog hops onto a mossy log and slips into tall reeds; {pet} stands in the shallow water, confused." },
+    { t: "{adult} got {pet} back on the bank. \"You are so wet!\" said {adult}.", d: "{adult} lifts dripping {pet} out onto the grass; {child} laughs." },
+    { t: "{pet} shook and shook. Then {child} and {adult} got wet too!", d: "{pet} shakes off water in a spray of droplets; {child} and {adult} shield their faces." },
+    { t: "{child} sat still on the bank and did not speak. Then the frog hopped out of the reeds.", d: "{child} sits very still on the bank; the frog peeks out of the reeds and hops onto a stone near them." },
+    { t: "\"Hello, frog,\" said {child} softly. The frog went, \"Croak!\" It was a frog hello!", d: "The frog sits on a stone near {child}, both looking at each other; {pet} lies drying in the sun." }
+  ]},
+  { id: "s4-storm", stage: 4, title: "The storm", blurb: "The wind howls and the lights go out. Time for a torch and a story.", cast: ["child", "adult", "pet"], pages: [
+    { t: "It was a dark and windy night. The wind went whoosh, whoosh down the chimney.", d: "Outside a cosy house at night, trees bending in a strong wind, dark clouds rushing past the moon." },
+    { t: "Rain hit the windows. Drip, drip, drip! {pet} hid under the bed.", d: "Rain lashes a bedroom window; {pet} peeks out from under the bed." },
+    { t: "Then there was a big flash of lightning. Crash! Bang! It was thunder.", d: "A bright flash of lightning lights up the room; {child} jumps in surprise." },
+    { t: "And then the lights went out! It was pitch black. \"{adult}!\" said {child}.", d: "The room goes dark; only {child}'s wide eyes and a faint window light are seen." },
+    { t: "{adult} came in with a torch. \"Do not be frightened,\" said {adult}. \"It is just a storm.\"", d: "{adult} comes in with a torch, its beam lighting a friendly path across the room to {child}." },
+    { t: "{adult} lit some candles. The room was soft and yellow and not so scary.", d: "Candles in jars glow on a shelf; the room is warm and golden." },
+    { t: "{child} got a big blanket. They made a den on the bed. {pet} crept in too.", d: "{child} and {adult} under a blanket den on the bed, lit by the torch; {pet} crawls in to join them." },
+    { t: "{adult} told a story by torchlight. It was a story of a brave little boat in a storm.", d: "{adult} holds the torch under their chin to tell a story; {child} listens, hugging {pet}." },
+    { t: "Soon the thunder went quiet. The rain went drip, drip, then stopped.", d: "The window shows the storm passing, the moon peeking out from the clouds." },
+    { t: "Then the lights came back on! But {child} and {pet} were fast asleep in the den.", d: "The bedroom light is on again; {child} and {pet} are asleep in the blanket den; {adult} smiles and switches the light off." }
+  ]},
+  { id: "s4-den", stage: 4, title: "The den in the wood", blurb: "Sticks, ferns and a blanket make the best den in the wood.", cast: ["child", "adult", "pet"], pages: [
+    { t: "{child}, {adult} and {pet} went for a walk in the wood. The trees were tall and green.", d: "A sunny woodland path with tall trees and ferns; {child}, {adult} and {pet} walking along." },
+    { t: "\"Let us make a den,\" said {child}. \"We can use sticks and ferns.\"", d: "{child} points at a big fallen tree with lots of sticks around it; {adult} nods." },
+    { t: "{child} and {adult} got long sticks. They rested them on a big log.", d: "{child} and {adult} lean long sticks against a fallen log to make a den frame." },
+    { t: "{pet} wanted to help. {pet} got a stick too, but it was a very little one!", d: "{pet} proudly carries a tiny twig in its mouth." },
+    { t: "Then they put ferns on the sticks. The den was green and snug.", d: "{child} drapes big green ferns over the sticks; the den looks like a little green tent." },
+    { t: "{child} crept in. It was dark in the den. It smelt of soil and moss.", d: "{child} peeks out from inside the snug fern den, smiling." },
+    { t: "{adult} had a flask of hot chocolate and some biscuits. They had a snack in the den.", d: "{adult} and {child} squeeze inside the den with a flask and a tin of biscuits; {pet} sniffs the biscuits." },
+    { t: "Then {child} spotted a robin on a branch. It had a red chest and a little black eye.", d: "A robin on a branch near the den entrance; {child} points at it from inside." },
+    { t: "The robin hopped down and pecked at a crumb. {child} kept still and did not speak.", d: "The robin pecks at a biscuit crumb on the ground just outside the den; {child} holds very still." },
+    { t: "\"We will come back to the den next week,\" said {child}. \"And the robin can come too!\"", d: "{child}, {adult} and {pet} walk away along the path, looking back at the fern den; the robin sits on top of it." }
+  ]},
+  { id: "s4-vet", stage: 4, title: "A trip to the vet", blurb: "{pet} has a sore paw. Will the vet help?", cast: ["child", "adult", "pet"], pages: [
+    { t: "{pet} was not well. {pet} did not want to run or jump. {pet} held up a sore paw.", d: "{pet} lies on a cushion looking sorry for itself, holding up one paw; {child} strokes {pet}." },
+    { t: "\"We must go to the vet,\" said {adult}. {child} put {pet} in the car.", d: "{child} gently lifts {pet} into a pet carrier in the back of a car; {adult} holds the car door." },
+    { t: "At the vet, there was a big dog. There was a cat in a box. There was a rabbit with long ears.", d: "A vet's waiting room with a big dog, a cat in a carrier and a rabbit with long ears; {child} sits with {pet}." },
+    { t: "Then the vet said, \"{pet}, come in!\" The vet had a kind grin and a green top.", d: "A friendly vet in green scrubs calls from a doorway; {child} and {adult} stand up with {pet}." },
+    { t: "The vet felt {pet}'s paw. \"It is a thorn,\" said the vet. \"It is stuck in the pad.\"", d: "The vet gently holds {pet}'s paw on the examination table, looking at a tiny thorn; {child} watches." },
+    { t: "{child} held {pet} and said, \"It will be fine. Be brave!\" The vet got the thorn out.", d: "{child} hugs {pet}'s head while the vet pulls out the thorn with tweezers." },
+    { t: "\"Well done,\" said the vet, and {pet} got a treat. {pet} was so glad!", d: "The vet gives {pet} a treat; {pet} wags happily; {child} beams." },
+    { t: "{pet} got a little bandage on the paw. It was a bright red one.", d: "{pet} sits on the table proudly showing a little red bandage on one paw." },
+    { t: "Back at home, {pet} had a rest in a basket. {child} sat next to {pet} all the time.", d: "At home, {pet} rests in a cosy basket; {child} sits beside it reading a book." },
+    { t: "The next morning, {pet} ran into the garden. {pet} jumped up and down. {pet} was well again!", d: "Morning in the garden; {pet} leaps happily on the grass, bandage gone; {child} and {adult} cheer at the back door." }
+  ]},
+  { id: "s4-swim", stage: 4, title: "In the swimming pool", blurb: "Armbands on, a big splash, and the first swim with no help.", cast: ["child", "adult"], pages: [
+    { w: { child: "a bright blue swimming costume with a little yellow star and orange armbands" }, t: "{child} and {adult} went to the swimming pool. {child} had a bag with a towel and armbands.", d: "Outside a leisure centre; {child} carries a swim bag, {adult} holds the door." },
+    { w: { child: "a bright blue swimming costume with a little yellow star and orange armbands" }, t: "The pool was big and blue. It had a slide and a fountain that went splash.", d: "A bright indoor swimming pool with a curly slide and a little fountain; {child} stares in delight." },
+    { w: { child: "a bright blue swimming costume with a little yellow star and orange armbands" }, t: "{child} put the armbands on and got into the shallow end. The water was cool.", d: "{child} in orange armbands steps down the pool steps into shallow water." },
+    { w: { child: "a bright blue swimming costume with a little yellow star and orange armbands" }, t: "{adult} held {child}'s hands. \"Kick, kick, kick!\" said {adult}. Splash, splash!", d: "{adult} in the water holds {child}'s hands as {child} kicks, splashing water everywhere." },
+    { w: { child: "a bright blue swimming costume with a little yellow star and orange armbands" }, t: "Then {child} went down the slide. Whoosh! Splash! {child} came up with a big grin.", d: "{child} zooms off the end of the slide into the water with a splash." },
+    { w: { child: "a bright blue swimming costume with a little yellow star and orange armbands" }, t: "\"Can I swim with no armbands?\" said {child}. \"Let us try,\" said {adult}.", d: "{child} takes off one armband, looking determined; {adult} stands ready a little way off." },
+    { w: { child: "a bright blue swimming costume with a little yellow star and orange armbands" }, t: "{adult} stood a little way off. {child} kicked and swam and kicked and swam.", d: "{child} swims a few strokes towards {adult}, chin up, kicking hard." },
+    { w: { child: "a bright blue swimming costume with a little yellow star and orange armbands" }, t: "{child} got to {adult}! \"I did it!\" said {child}. \"I swam all on my own!\"", d: "{child} reaches {adult}'s arms; both are cheering." },
+    { w: { child: "a bright blue swimming costume with a little yellow star and orange armbands" }, t: "A lifeguard gave {child} a thumbs up. \"Well done!\" she said.", d: "A smiling lifeguard on a tall chair gives a thumbs up." },
+    { t: "Then they had chips in the café. {child} felt so proud and so hungry!", d: "In the leisure centre café, {child} with damp hair eats chips next to {adult}, holding up a swimming certificate." }
   ]}
 ];
 
