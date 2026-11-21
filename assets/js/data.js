@@ -47,7 +47,7 @@ FLR.stages = [
     sample: "Dad got the big red bag. Is the dog in it?" },
   { n: 3, band: "Yellow", color: "#FFC21A", ink: "#1E1A33", phase: "Phase 3", year: "Reception", age: "4–5",
     text: "One or two lines a page", what: "Two letters, one sound: ch, sh, th, ee, ai, ar and more.",
-    sample: "Look at the fish in the pond. It has a long tail and it can see me!" },
+    sample: "Look at the fish in the pool. It has a long tail and it can see me!" },
   { n: 4, band: "Blue", color: "#16A6E3", ink: "#fff", phase: "Phases 3–4", year: "Reception to Year 1", age: "4–6",
     text: "Two or three lines a page", what: "Longer words with letters side by side, like stop, frog and jump.",
     sample: "Gran and Jess went to the farm. They had lunch on a big flat rock next to the stream." },
