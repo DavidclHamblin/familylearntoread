@@ -189,7 +189,8 @@ FAQ = [
     ("Are these the same books my child reads at school?", "No. Every story and picture is our own, and we are not connected with any reading scheme publisher. Our stages follow the same Book Band colours and phonics phases that most UK schools use, so the words are pitched at the level your child is learning."),
     ("How do you put my family in the books?", "You add an ordinary photo of each person and choose who is who. We first draw everyone as a cartoon character, you approve them, and every page of every book is drawn from those characters. Your family looks the same from the first page of the first book to the last."),
     ("What is a sound pack?", "Five books, each built around one sound such as ch, sh or ar. The story is packed with words that use the sound, the letters are picked out in colour, and the last page has a few words to practise."),
-    ("Printed or online?", f"A printed pack is five short paperback books posted to you, and it comes with the online versions free. An online pack is the same five books on a private page you can open on a phone, tablet or computer. Launch prices are {money(PRICES['printed']['price'])} for a printed pack and {money(PRICES['online']['price'])} for an online pack."),
+    ("Printed or online?", f"Printed books are short square paperbacks posted to you, and they come with the online versions free. Online books are the same stories on a private page you can open on a phone, tablet or computer. Launch prices: one printed book {money(PRICES['printed']['sizes']['1'])}, 5 for {money(PRICES['printed']['sizes']['5'])} or 10 for {money(PRICES['printed']['sizes']['10'])}; online, one book {money(PRICES['online']['sizes']['1'])}, 5 for {money(PRICES['online']['sizes']['5'])} or 10 for {money(PRICES['online']['sizes']['10'])}."),
+    ("Can I buy just one book, or more than five?", "Yes. Every book can be bought on its own, or in a pack of 5 or 10. A pack is always different stories at the same stage (or different sounds), never copies of one book, and your family's characters are the same in every book."),
     ("Can I write my own story?", "Soon. You'll be able to tell us an idea, such as a day at the beach with Grandad, and we'll write it at your child's stage. Every word is checked against the sounds and words for that stage before anything is drawn, and you read and approve the story first."),
     ("When my child moves up, can the same family appear again?", "Yes, if you choose to keep your family's characters. We keep only the cartoon characters, never your photos, so the next pack shows the same family. You can delete them at any time."),
     ("Where are my photos stored?", "In private, encrypted storage in the European Union, in Cloudflare's EU data centres. Before a photo leaves your phone or computer, we shrink it and remove hidden details such as where it was taken. Your photos are never published.", "faq-privacy"),
@@ -202,16 +203,21 @@ def faq_html():
     return "".join(f'<details{" id=" + chr(34) + q[2] + chr(34) if len(q) > 2 else ""}><summary>{e(q[0])}</summary><p>{q[1] if "money" in q[1] else e(q[1])}</p></details>' for q in FAQ)
 
 
+def sizes_table(sz):
+    rows = "".join(f'<tr><th scope="row">{"1 book" if n == "1" else n + " books"}</th><td>{money(eur)}</td></tr>' for n, eur in sz.items())
+    return f'<table class="sizes">{rows}</table>'
+
+
 def pricing():
     p, o, w = PRICES["printed"], PRICES["online"], PRICES["own"]
     return f"""<section id="pricing" class="section" style="--bc:var(--red);padding-top:0"><div class="wrap">
-<div class="sec-head"><p class="eyebrow">Pricing</p><h2>Packs of five books</h2><p class="lede">Every stage and every sound comes as a pack of five short books. Choose printed books, or read them online. Founding families on our list get {DISCOUNT}% off their first pack.</p></div>
+<div class="sec-head"><p class="eyebrow">Pricing</p><h2>One book, or a pack of 5 or 10</h2><p class="lede">Buy a single book, or save with a pack of 5 or 10 different stories at your child's stage. Choose printed books, or read them online. Founding families on our list get {DISCOUNT}% off their first order.</p></div>
 <div class="editions">
-<div class="edition featured"><span class="badge">Most popular</span><h3>{e(p["name"])}</h3><p class="muted">{e(p["what"])}</p><p class="amt">{money(p["price"])} <small>for 5 books</small></p><p class="muted">{e(p["detail"])}</p><a class="btn red" href="#join">Join the list for {DISCOUNT}% off</a></div>
-<div class="edition"><h3>{e(o["name"])}</h3><p class="muted">{e(o["what"])}</p><p class="amt">{money(o["price"])} <small>for 5 books</small></p><p class="muted">{e(o["detail"])}</p></div>
+<div class="edition featured"><span class="badge">Most popular</span><h3>{e(p["name"])}</h3><p class="muted">{e(p["what"])}</p><p class="amt">{money(p["sizes"]["5"])} <small>for 5 books</small></p>{sizes_table(p["sizes"])}<p class="muted">{e(p["detail"])}</p><a class="btn red" href="#join">Join the list for {DISCOUNT}% off</a></div>
+<div class="edition"><h3>{e(o["name"])}</h3><p class="muted">{e(o["what"])}</p><p class="amt">{money(o["sizes"]["5"])} <small>for 5 books</small></p>{sizes_table(o["sizes"])}<p class="muted">{e(o["detail"])}</p></div>
 <div class="edition"><span class="badge" style="background:var(--muted)">Coming later</span><h3>{e(w["name"])}</h3><p class="muted">{e(w["what"])}</p><p class="amt">+{money(w["price"])} <small>a book</small></p><p class="muted">{e(w["detail"])}</p></div>
 </div>
-<p class="note">Launch prices, to be confirmed before ordering opens. Delivery costs for printed packs are shown at checkout.</p>
+<p class="note">Launch prices, to be confirmed before ordering opens. A pack is always different stories, never copies of one book. Delivery costs for printed books are shown at checkout.</p>
 </div></section>"""
 
 
@@ -250,7 +256,7 @@ def home():
 <div class="step"><h3>Choose a stage or sounds</h3><p>Match your school's reading scheme, or take our two-minute reading check.</p></div>
 <div class="step"><h3>Cast your family</h3><p>Add a photo of each person: your reader, grown-ups, brothers and sisters, even the dog.</p></div>
 <div class="step"><h3>Meet your characters</h3><p>We draw everyone as a cartoon first. You approve them, and they open every book.</p></div>
-<div class="step"><h3>Read in print or online</h3><p>Every page is drawn from your approved characters, so they look the same in all five books.</p></div>
+<div class="step"><h3>Read in print or online</h3><p>Every page is drawn from your approved characters, so they look the same in every book.</p></div>
 </div></div></section>
 
 <section class="section" style="padding-top:0"><div class="wrap">
