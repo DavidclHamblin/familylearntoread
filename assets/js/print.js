@@ -1,5 +1,5 @@
 /* Family Learn to Read: builds one book's print files for Lulu in the browser (print.html).
-   print.html?story=s3-rain                       our example book (placeholder pictures), for checking the layout
+   print.html?story=s3-rain                       our example book (our painted sets and example family, or placeholders), for checking the layout
    print.html?story=s3-rain&d=<draft>#<token>     a customer's book, from the cartoon service (the print key works too)
    &part=cover                                    the cover sheet instead of the 32 inside pages
    Lulu product "reader": 8.5 in square paperback, 32 pages. Save as PDF from Chrome (or headless Chrome):
@@ -43,7 +43,10 @@
   function load() {
     if (!draft) {
       var jobs = B.cast.map(function (k) { return placeholder("char", name(k), 600, 800, 40 + k.length * 50).then(function (u) { pics["c-" + k] = u; }); });
-      B.pages.forEach(function (p, i) { jobs.push(placeholder("spread", "Picture " + (i + 1) + ": " + fill(p.d, true).replace(/&#39;/g, "'").replace(/&amp;/g, "&"), 1600, 811, i * 37 % 360, i % 2 ? 0.66 : 0.34).then(function (u) { pics["s" + (i + 1)] = u; })); });
+      var Ly = F.layers, plan = Ly && Ly.plan(B), u = Ly && Ly.exampleUrl(F.config.api, key);
+      B.pages.forEach(function (p, i) { jobs.push((Ly ? Ly.paint(Object.assign(document.createElement("canvas"), { width: 2400, height: 1216 }), u.scene(i + 1), plan[i], u.pose)
+        .then(function (c) { return new Promise(function (ok) { c.toBlob(function (b) { pics["s" + (i + 1)] = URL.createObjectURL(b); ok(); }, "image/jpeg", 0.92); }); }) : Promise.reject())
+        .catch(function () { return placeholder("spread", "Picture " + (i + 1) + ": " + fill(p.d, true).replace(/&#39;/g, "'").replace(/&amp;/g, "&"), 1600, 811, i * 37 % 360, i % 2 ? 0.66 : 0.34).then(function (u) { pics["s" + (i + 1)] = u; }); })); });
       return Promise.all(jobs);
     }
     return api("").then(function (r) { if (!r.ok) throw new Error("draft not found (" + r.status + ")"); return r.json(); }).then(function (st) {

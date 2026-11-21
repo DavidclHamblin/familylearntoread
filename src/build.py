@@ -373,7 +373,7 @@ def books(stage=3):
 </div></div></section>"""
     return page(f"{st['band']} reading books with your family | Family Learn to Read",
                 f"Ten personalised Stage {stage} ({st['band']} band) reading books, every word checked for your child's phonics stage. Buy one, or packs of 5 or 10.",
-                books_file(stage), body, "books", scripts=("phonics.js", "readers.js", "family.js", "books.js"))
+                books_file(stage), body, "books", scripts=("phonics.js", "readers.js", "layers.js", "family.js", "books.js"))
 
 
 GUIDE_GOOD = ["A recent photo, in good daylight", "Face to the camera, with the face nice and big", "Eyes clearly visible: no sunglasses or hats pulled low", "Just them in the photo", "For a pet: the whole animal, side on, is ideal"]
@@ -425,6 +425,7 @@ def print_page():
 <script src="{v("js/data.js")}"></script>
 <script src="{v("js/phonics.js")}"></script>
 <script src="{v("js/readers.js")}"></script>
+<script src="{v("js/layers.js")}"></script>
 <script src="{v("js/print.js")}"></script>
 </body>
 </html>
