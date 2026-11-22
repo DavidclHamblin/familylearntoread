@@ -127,11 +127,32 @@ POND = ('<svg viewBox="0 0 400 240" aria-hidden="true"><rect width="400" height=
 
 def sample_page():
     """A sample Stage 3 page: picture on top, words below, the sound being practised picked out."""
-    return f"""<figure class="reader" aria-label="A sample page from a Stage 3 reader">
-<div class="reader-pic">{POND}</div>
-<p class="reader-text">Mia and Dad look at the <b>f</b><b>i</b><b class="hl">sh</b>.<br>It has a long tail!</p>
+    return f"""<figure class="reader" aria-label="A sample page from a Stage 3 reader" data-sample="s3-rain:5">
+<div class="reader-pic">{POND}<canvas width="1600" height="900" aria-hidden="true"></canvas></div>
+<p class="reader-text" data-words-after>Mia and Dad look at the <b>f</b><b>i</b><b class="hl">sh</b>.<br>It has a long tail!</p>
 <figcaption class="small">Example page, Stage 3 (Yellow band). Your book shows your own family, drawn from your photos.</figcaption>
 </figure>"""
+
+
+SAMPLES = [("s3-rain", 4), ("s4-snow", 4), ("s4-frog", 7)]
+
+
+def see_inside():
+    """Real painted pages from the books, before anyone starts choosing (home.js paints them)."""
+    by = {b["id"]: b for b in READERS}
+    band = {x["n"]: x for x in STAGES}
+    cards = "".join(f'''<figure class="peek" data-sample="{bid}:{n}" data-optional style="--bc:{band[by[bid]["stage"]]["color"]}">
+<div class="peek-pic"><canvas width="1600" height="900" aria-hidden="true"></canvas></div>
+<p class="peek-words" data-words></p>
+<figcaption><b>{e(by[bid]["title"])}</b> · Stage {by[bid]["stage"]}, {e(band[by[bid]["stage"]]["band"])} · page {n}</figcaption></figure>''' for bid, n in SAMPLES)
+    family = "".join(f'<figure><img data-family="{k}" alt="Our example {lbl}" width="180" height="240" loading="lazy"><figcaption>{lbl.capitalize()}</figcaption></figure>' for k, lbl in (("child", "child"), ("adult", "grown-up"), ("pet", "pet")))
+    return f'''<section id="inside" class="section" style="padding-top:28px"><div class="wrap">
+<div class="sec-head"><p class="eyebrow">See inside</p><h2>Real pages from our books</h2>
+<p class="lede">Every page is painted, and your family are drawn into every picture. These pages show our example family: Sam, Mum and Biscuit the dog.</p></div>
+<div class="peeks">{cards}</div>
+<div class="family-row"><div><h3>Your family, drawn once</h3><p class="muted">Send a photo of your child, the grown-up who reads with them and your pet (or use ours). We draw each of them once in the book style, and they appear in every book you choose.</p>
+<p><a class="btn red" href="books.html">Look inside every book</a></p></div><div class="family-figs">{family}</div></div>
+</div></section>'''
 
 
 def stage_card(s):
@@ -238,6 +259,8 @@ def home():
 {sample_page()}
 </div></section>
 
+{see_inside()}
+
 <section id="find" class="section" style="padding-top:28px"><div class="wrap">
 <div class="sec-head"><p class="eyebrow">Step one</p><h2>Find your child's stage</h2><p class="lede">Books at the right level build confidence: your child should be able to read almost every word.</p></div>
 {finder()}
@@ -285,7 +308,7 @@ def home():
 """
     return page("Family Learn to Read: personalised reading books at your child's level",
                 "Early reading books and phonics books with your family as the characters. Matched to your child's school reading level, printed or online. Ages 4 to 7.",
-                "", body, "stages", scripts=("finder.js",))
+                "", body, "stages", scripts=("finder.js", "readers.js", "layers.js", "home.js"))
 
 
 # ---------- Reading check ----------
