@@ -1,7 +1,7 @@
 /* Family Learn to Read: layered pictures.
    Each scene (a "set") is painted once with none of the family in it, and kept for every order. Each family member
-   is drawn once in a few cut-out poses on flat green. This file decides which pose and outfit each character has on
-   each page, keys out the green and places the poses on the set.
+   is drawn once in a few cut-out poses on flat magenta. This file decides which pose and outfit each character has on
+   each page, keys out the magenta and places the poses on the set.
    Used by books.js (Look inside), print.js and tools/export_worker.js (which tells the cartoon service the poses). */
 var FLR = (typeof window !== "undefined" ? (window.FLR = window.FLR || {}) : {});
 (function (F) {
@@ -92,7 +92,7 @@ var FLR = (typeof window !== "undefined" ? (window.FLR = window.FLR || {}) : {})
     });
     return cache[url];
   }
-  // Keys out the flat green and trims to the character. Returns a canvas.
+  // Keys out the flat magenta (#FF00FF; green would cut out green clothes) and trims to the character. Returns a canvas.
   var keyed = {};
   L.cutout = function (url) {
     if (!keyed[url]) keyed[url] = loadImg(url).then(function (img) {
@@ -100,10 +100,10 @@ var FLR = (typeof window !== "undefined" ? (window.FLR = window.FLR || {}) : {})
       var g = c.getContext("2d"); g.drawImage(img, 0, 0);
       var px = g.getImageData(0, 0, w, h), d = px.data, x0 = w, y0 = h, x1 = 0, y1 = 0;
       for (var y = 0; y < h; y++) for (var x = 0; x < w; x++) {
-        var o = (y * w + x) * 4, r = d[o], gr = d[o + 1], b = d[o + 2], k = gr - Math.max(r, b);
-        if (k > 70) { d[o + 3] = 0; continue; }
-        if (k > 20) { d[o + 3] = Math.round(255 * (1 - (k - 20) / 50)); d[o + 1] = Math.max(r, b); }  // soft edge, no green fringe
-        else if (k > 0) d[o + 1] = Math.max(r, b) + Math.round(k / 3);
+        var o = (y * w + x) * 4, r = d[o], gr = d[o + 1], b = d[o + 2], k = Math.min(r, b) - gr;
+        if (k > 90) { d[o + 3] = 0; continue; }
+        if (k > 30) { d[o + 3] = Math.round(255 * (1 - (k - 30) / 60)); d[o] = Math.max(gr, r - k); d[o + 2] = Math.max(gr, b - k); }  // soft edge, no pink fringe
+        else if (k > 0) { d[o] = r - Math.round(k / 3); d[o + 2] = b - Math.round(k / 3); }
         if (d[o + 3] > 40) { if (x < x0) x0 = x; if (x > x1) x1 = x; if (y < y0) y0 = y; if (y > y1) y1 = y; }
       }
       g.putImageData(px, 0, 0);

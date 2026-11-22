@@ -21,7 +21,7 @@ Illustrations on the site are our own placeholders. Customer photos are never pu
 
 ## Books, characters and print files
 
-- `assets/js/layers.js`: layered pictures. Each scene is painted once with no family in it (a "set" on the cartoon service), the family is drawn once in cut-out poses, and this file picks each page's poses, keys out the green and places them. Look inside and print.html?story= (example) show our sets with our example family. Change pages with an optional `p: {child: "wave"}`.
+- `assets/js/layers.js`: layered pictures. Each scene is painted once with no family in it (a "set" on the cartoon service), the family is drawn once in cut-out poses, and this file picks each page's poses, keys out the magenta and places them. Look inside and print.html?story= (example) show our sets with our example family. Change pages with an optional `p: {child: "wave"}`.
 - `books.html` (Stage 3 Yellow) and `books-blue.html` (Stage 4 Blue), from assets/js/books.js: the stage libraries, with a band switcher. A pack can mix stages. Look inside any book with your own names, and build a pack
   of 1, 5 or 10 different stories, printed or online, with the price (packs of 10, then 5, then singles).
 - `make.html` (assets/js/make.js): photos of the child, the grown-up and the pet (or our stand-ins) are drawn once by
