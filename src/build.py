@@ -134,7 +134,7 @@ def sample_page():
 </figure>"""
 
 
-SAMPLES = [("s3-rain", 4), ("s4-snow", 4), ("s4-frog", 7)]
+SAMPLES = [("s3-owl", 8), ("s4-tent", 4), ("s4-snow", 7)]  # pages that layer well
 
 
 def see_inside():
