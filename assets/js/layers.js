@@ -142,7 +142,8 @@ var FLR = (typeof window !== "undefined" ? (window.FLR = window.FLR || {}) : {})
     api = (api || "").replace(/\/+$/, "");
     return {
       scene: function (n) { return api + "/api/sets/" + bookId + "/s" + n + "?w=web"; },
-      pose: function (slot) { return api + "/api/sets/example/" + slot + "?w=web"; }
+      // A pose in the usual clothes is shared by every book; one in a book's own outfit lives with that book.
+      pose: function (slot) { return api + "/api/sets/" + (/-costume-/.test(slot) ? "example" : bookId) + "/" + slot + "?w=web"; }
     };
   };
 })(FLR);
