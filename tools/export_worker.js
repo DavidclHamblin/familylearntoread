@@ -33,6 +33,7 @@ readers.forEach(function (b) {
     var desc = (p.set || p.d).replace(/\{(\w+)\}/g, function (_, r) { return ROLES[r].name; }).replace(/\.$/, "");
     var cast = plan[i].figures.map(function (f) { return f.role; });  // named in the description, or "all three"
     var sc = scenes[i + 1] = { cast: cast, text: i % 2 ? "left" : "right", others: /farmer|museum|stall|fair/.test(p.d), desc: desc };
+    if (p.g) sc.ground = p.g;  // what the characters stand in (mud, a puddle…)
     if (cast.length) sc.poses = {};
     plan[i].figures.forEach(function (f) { sc.poses[f.role] = f.pose; });  // the cut-out pose each character takes (layers.js)
     Object.keys(p.w || {}).forEach(function (r) {  // a different outfit on this page

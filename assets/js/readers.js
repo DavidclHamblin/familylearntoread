@@ -3,8 +3,9 @@
    (the cast page teaches them, so the checker treats them as names). The child and pet are never
    called he, she or it, so any child and any pet fit. "d" describes the picture for the cartoon service, and "w" gives
    a different outfit on that page (otherwise everyone wears the same clothes in every book). Optional picture
-   fields: "p" fixes a character's pose, "x" places a character (0 = left edge, 1 = right edge), and "set" describes the
-   empty scene for the painter when "d" alone would put things in the wrong place.
+   fields: "p" fixes a character's pose, "x" places a character (0 = left edge, 1 = right edge), "set" describes the
+   empty scene for the painter when "d" alone would put things in the wrong place, and "g" is the ground the
+   characters stand in (mud, a puddle).
    tools/check_stories.js checks every page at its stage; run it after any change. */
 var FLR = (typeof window !== "undefined" ? (window.FLR = window.FLR || {}) : {});
 
@@ -31,10 +32,10 @@ FLR.readers = [
       set: "The front of a cosy house in heavy rain, seen from the garden path. On the right, from about 65% to 95% across, the front door stands wide open under a small porch roof, with a dry doorstep and a doormat. The rest is the wet front garden: a stone path with puddles, flowers bending in the rain and rain pouring down everywhere except under the porch" },
     { w: { child: RAINCOAT }, t: "Rain hits the roof. Tap, tap, tap!", d: "A cosy house seen from outside, big raindrops bouncing off the roof, {child} looking up from the window." },
     { w: { child: RAINCOAT }, t: "{child} and {adult} go out. Rain is fun!", d: "{child} and {adult} step out into the rain, faces up, laughing, {pet} running ahead." },
-    { w: { child: MUDDY }, x: { child: 0.3 }, t: "{child} hops in the mud. Mud is on the boots!", d: "{child} hops in a big muddy patch, mud splattered up red wellington boots.",
-      set: "A grassy park with tall trees, a wooden fence and a winding path, in light rain. A big, wide, squelchy brown mud puddle fills the foreground from about 8% to 55% across and runs right down to the bottom edge, with blobs of mud flying up from it. Nothing at all lies in or near the mud: no boots, shoes, clothes or toys" },
-    { w: { child: MUDDY, pet: MUDDY_PET }, x: { pet: 0.66 }, p: { pet: "roll" }, t: "{pet} rolls in the mud. Now {pet} is all covered in mud!", d: "{pet} rolls on its back in the mud, completely brown, looking delighted.",
-      set: "A grassy park with tall trees, a wooden fence and a winding path, in light rain. A big, squelchy brown mud patch fills the foreground from about 40% to 92% across and runs right down to the bottom edge, churned up and splattered, with blobs of mud flicked onto the grass around it" },
+    { w: { child: MUDDY }, x: { child: 0.3 }, g: "a big, wide, squelchy brown mud puddle with blobs of mud flying up", t: "{child} hops in the mud. Mud is on the boots!", d: "{child} hops in a big muddy patch, mud splattered up red wellington boots.",
+      set: "A grassy park with tall trees, a wooden fence and a winding path, in light rain. Nothing at all lies in or near the mud: no boots, shoes, clothes or toys" },
+    { w: { child: MUDDY, pet: MUDDY_PET }, x: { pet: 0.56 }, p: { pet: "roll" }, g: "a big, churned-up, squelchy brown mud patch with mud splattered around it", t: "{pet} rolls in the mud. Now {pet} is all covered in mud!", d: "{pet} rolls on its back in the mud, completely brown, looking delighted.",
+      set: "A grassy park with tall trees, a wooden fence and a winding path, in light rain" },
     { w: { child: MUDDY }, x: { child: 0.2 }, t: "Look! A duck is in the rain. Quack, quack!", d: "A cheerful duck waddles past in the rain; {child} points at it.",
       set: "A grassy park with tall trees, a wooden fence and a winding path, in the rain. " + DUCK + " waddles along the grass in the open at about 55% across, in the middle distance, with clear grass all around it and nothing in front of it; the bottom left of the picture is open wet grass" },
     { w: { child: MUDDY }, x: { child: 0.76 }, t: "The duck has fun in the wet. {child} has fun too.", d: "The duck flaps in a puddle beside {child}, who copies it with arms out like wings.",
