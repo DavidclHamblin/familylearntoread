@@ -171,7 +171,7 @@ var FLR = (typeof window !== "undefined" ? (window.FLR = window.FLR || {}) : {})
   };
   // Our example family's pictures (stand-ins, never a real person) and the sets, from the cartoon service.
   // Change this after repainting any example pictures, so browsers and the cache fetch the new ones at once.
-  L.ART = "20261123c";
+  L.ART = "20261123d";
   L.exampleUrl = function (api, bookId) {
     api = (api || "").replace(/\/+$/, "");
     return {
