@@ -8,7 +8,7 @@ var FLR = (typeof window !== "undefined" ? (window.FLR = window.FLR || {}) : {})
   "use strict";
   var L = F.layers = {};
   L.PEOPLE = ["stand", "walk", "wave", "point", "cheer", "hold", "crouch", "sit"];
-  L.PETS = ["stand", "sit", "run", "lie"];
+  L.PETS = ["stand", "sit", "run", "lie", "roll"];
   // Words in a character's part of the picture description, and the pose they get: [pattern, person, pet].
   var RULES = [
     [/\b(wav(e|es|ing))\b/, "wave", "stand"],
@@ -21,7 +21,7 @@ var FLR = (typeof window !== "undefined" ? (window.FLR = window.FLR || {}) : {})
     [/\b(walk|stroll|run|race|trot|follow|head|go|went|set off)/, "walk", "run"]
   ];
   var HEIGHT = { adult: 0.74, child: 0.56, pet: 0.3 };  // of the picture's height, standing
-  var SHRINK = { sit: 0.68, crouch: 0.7, lie: 0.62, cheer: 1.06 };
+  var SHRINK = { sit: 0.68, crouch: 0.7, lie: 0.62, roll: 0.6, cheer: 1.06 };
 
   // The part of the description about this role: from its {role} to the next role or the end of the clause.
   function partFor(d, role) {
@@ -53,7 +53,7 @@ var FLR = (typeof window !== "undefined" ? (window.FLR = window.FLR || {}) : {})
     });
     return out;
   };
-  // For each page: { side: where the words go, figures: [{ role, outfit, pose, slot }] }.
+  // For each page: { side: where the words go, figures: [{ role, outfit, pose, slot, x }] } (x: a fixed place, 0–1 across).
   L.plan = function (book) {
     var outfits = L.outfits(book);
     return book.pages.map(function (p, i) {
@@ -63,7 +63,7 @@ var FLR = (typeof window !== "undefined" ? (window.FLR = window.FLR || {}) : {})
         var pose = (p.p && p.p[r]) || L.poseFor(p.d, r);
         if (!pose) return;
         var outfit = outfits[i][r] || "costume";
-        figs.push({ role: r, outfit: outfit, pose: pose, slot: "pose-" + r + "-" + outfit + "-" + pose });
+        figs.push({ role: r, outfit: outfit, pose: pose, slot: "pose-" + r + "-" + outfit + "-" + pose, x: p.x && p.x[r] });
       });
       if (!figs.length && /\b(all three|everyone|the family|both of them|together)\b/i.test(p.d))  // the whole cast, unnamed
         book.cast.slice().sort(function (a, b) { return ["adult", "child", "pet"].indexOf(a) - ["adult", "child", "pet"].indexOf(b); }).forEach(function (r) {
@@ -127,7 +127,7 @@ var FLR = (typeof window !== "undefined" ? (window.FLR = window.FLR || {}) : {})
         figs.forEach(function (x, i) {
           var hgt = HEIGHT[x.f.role] * (SHRINK[x.f.pose] || 1) * (figs.length === 1 && x.f.role === "pet" ? 1.6 : 1) * H, wid = hgt * x.img.width / x.img.height;
           var at = zone[0] + (zone[1] - zone[0]) * (flip ? (figs.length - i) : (i + 1)) / (figs.length + 1);
-          var cx = at * W, left = cx - wid / 2;
+          var cx = (x.f.x != null ? x.f.x : at) * W, left = cx - wid / 2;
           g.save(); g.fillStyle = "rgba(30,26,51,.16)"; g.beginPath(); g.ellipse(cx, ground - 2, wid * 0.42, hgt * 0.035, 0, 0, Math.PI * 2); g.fill(); g.restore();
           g.save();
           if (flip) { g.translate(cx * 2, 0); g.scale(-1, 1); }
