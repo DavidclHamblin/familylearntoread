@@ -170,12 +170,14 @@ var FLR = (typeof window !== "undefined" ? (window.FLR = window.FLR || {}) : {})
       });
   };
   // Our example family's pictures (stand-ins, never a real person) and the sets, from the cartoon service.
+  // Change this after repainting any example pictures, so browsers and the cache fetch the new ones at once.
+  L.ART = "20261123b";
   L.exampleUrl = function (api, bookId) {
     api = (api || "").replace(/\/+$/, "");
     return {
-      scene: function (n) { return api + "/api/sets/" + bookId + "/s" + n + "?w=web"; },
+      scene: function (n) { return api + "/api/sets/" + bookId + "/s" + n + "?w=web&v=" + L.ART; },
       // A pose in the usual clothes is shared by every book; one in a book's own outfit lives with that book.
-      pose: function (slot) { return api + "/api/sets/" + (/-costume-/.test(slot) ? "example" : bookId) + "/" + slot + "?w=web"; }
+      pose: function (slot) { return api + "/api/sets/" + (/-costume-/.test(slot) ? "example" : bookId) + "/" + slot + "?w=web&v=" + L.ART; }
     };
   };
 })(FLR);
