@@ -10,7 +10,7 @@ readers.forEach(function (b) {
   if (ids[b.id]) { console.log(b.id + ": duplicate id"); bad++; }
   ids[b.id] = true;
   if (b.pages.length !== 10) { console.log(b.id + ": " + b.pages.length + " pages (books have 10)"); bad++; }
-  var names = b.cast.slice();
+  var names = b.cast.concat(b.teach || []);  // teach: words above the stage the book needs (shown with the tricky words)
   var title = P.page(b.title.replace(/\{(\w+)\}/g, "$1"), b.stage, names);
   if (!title.ok) { console.log(b.id + " title: " + title.problems.join("; ")); bad++; }
   b.pages.forEach(function (p, i) {

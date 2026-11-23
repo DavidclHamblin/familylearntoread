@@ -102,6 +102,7 @@
         (x.parts || []).forEach(function (g) { if (g.length > 1 && g.charAt(0) !== "+" && !found[g]) found[g] = w.toLowerCase(); });
       });
     });
+    (B.teach || []).forEach(function (w) { tricky[w] = 1; });  // words above the stage this book needs
     return { sounds: found, tricky: Object.keys(tricky) };
   }
 
