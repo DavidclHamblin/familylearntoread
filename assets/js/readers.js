@@ -2,7 +2,10 @@
    Each book has 10 story pages. {child}, {adult} and {pet} are replaced with the family's names
    (the cast page teaches them, so the checker treats them as names). The child and pet are never
    called he, she or it, so any child and any pet fit. "d" describes the picture for the cartoon service, and "w" gives
-   a different outfit on that page (otherwise everyone wears the same clothes in every book).
+   a different outfit on that page (otherwise everyone wears the same clothes in every book). Optional picture
+   fields: "p" fixes a character's pose, "x" places a character (0 = left edge, 1 = right edge), "set" describes the
+   empty scene for the painter when "d" alone would put things in the wrong place, and "g" is the ground the
+   characters stand in (mud, a puddle).
    tools/check_stories.js checks every page at its stage; run it after any change. */
 var FLR = (typeof window !== "undefined" ? (window.FLR = window.FLR || {}) : {});
 
@@ -13,18 +16,34 @@ FLR.readerRoles = [
   { key: "pet", name: "The pet", who: "Your pet, or our stand-in dog", label: "The pet's name", example: "Biscuit" }
 ];
 
+/* Outfits used on more than one page of a book. A "+" outfit keeps the usual clothes and adds to them. */
+var RAINCOAT = "a bright red raincoat with the hood down, blue jeans and red wellington boots";
+var MUDDY = RAINCOAT + ", with splashes of brown mud up the boots and jeans";
+var MUDDY_PET = "+covered all over in thick brown mud from nose to tail, the fur caked and dripping with it, looking very pleased";
+var SWIM_CHILD = "bright blue swimwear with a little yellow star (a swimming costume for a girl, swim shorts and a swim top for a boy) and orange armbands";
+var SWIM_ADULT = "plain navy swimwear for the pool (a swimming costume for a woman, swim shorts for a man)";
+var DUCK = "A cheerful round yellow cartoon duck with an orange beak and orange webbed feet, wearing no clothes";
+
 FLR.readers = [
   { id: "s3-rain", stage: 3, title: "Fun in the rain", blurb: "Dark clouds, a big hat and lots of mud. Rain is fun!", cast: ["child", "adult", "pet"], pages: [
-    { w: { child: "a bright red raincoat with the hood down, blue jeans and red wellington boots" }, t: "It is dark. Rain will fall soon. {child} gets a red coat.", d: "{child} pulls on a red raincoat by the front door while dark clouds gather outside the window; {adult} and {pet} watch." },
-    { w: { child: "a bright red raincoat with the hood down, blue jeans and red wellington boots" }, t: "{adult} gets a big hat and {pet} gets wet!", d: "{adult} puts on a huge floppy rain hat; {pet} stands in the open doorway already dripping." },
-    { w: { child: "a bright red raincoat with the hood down, blue jeans and red wellington boots" }, t: "Rain hits the roof. Tap, tap, tap!", d: "A cosy house seen from outside, big raindrops bouncing off the roof, {child} looking up from the window." },
-    { w: { child: "a bright red raincoat with the hood down, blue jeans and red wellington boots" }, t: "{child} and {adult} go out. Rain is fun!", d: "{child} and {adult} step out into the rain, faces up, laughing, {pet} running ahead." },
-    { w: { child: "a bright red raincoat with the hood down, blue jeans and red wellington boots" }, t: "{child} hops in the mud. Mud is on the boots!", d: "{child} hops in a big muddy patch, mud splattered up red wellington boots." },
-    { w: { child: "a bright red raincoat with the hood down, blue jeans and red wellington boots" }, t: "{pet} rolls in the mud. Now {pet} is all mud!", d: "{pet} rolls on its back in the mud, completely brown, looking delighted." },
-    { w: { child: "a bright red raincoat with the hood down, blue jeans and red wellington boots" }, t: "Look! A duck is in the rain. Quack, quack!", d: "A cheerful duck waddles past in the rain; {child} points at it." },
-    { w: { child: "a bright red raincoat with the hood down, blue jeans and red wellington boots" }, t: "The duck has fun in the wet. {child} has fun too.", d: "The duck flaps in a puddle beside {child}, who copies it with arms out like wings." },
-    { w: { child: "a bright red raincoat with the hood down, blue jeans and red wellington boots" }, t: "Then the sun is up. The rain has gone.", d: "The sun breaks through the clouds, a rainbow over the garden, everything shining and wet." },
-    { t: "{child}, {adult} and {pet} go back in. Mud, mud, mud! A bath for all!", d: "Back indoors, all three are covered in mud; a bubbly bath waits through the bathroom door." }
+    { w: { child: RAINCOAT }, t: "It is dark. Rain will fall soon. {child} gets a red coat.", d: "{child} pulls on a red raincoat by the front door while dark clouds gather outside the window; {adult} and {pet} watch." },
+    { w: { child: RAINCOAT, adult: "+holding a big floppy yellow rain hat in both hands, about to put it on", pet: "+soaking wet from the rain, fur dripping, with little drops flying off" }, x: { pet: 0.5, adult: 0.8 },
+      t: "{adult} gets a big hat and {pet} gets wet!", d: "{adult} holds a big floppy yellow rain hat under the porch; {pet} stands out in the pouring rain, dripping wet.",
+      set: "The front of a cosy house in heavy rain, seen from the garden path. On the right, from about 65% to 95% across, the front door stands wide open under a small porch roof, with a dry doorstep and a doormat. The rest is the wet front garden: a stone path with puddles, flowers bending in the rain and rain pouring down everywhere except under the porch" },
+    { w: { child: RAINCOAT }, t: "Rain hits the roof. Tap, tap, tap!", d: "A cosy house seen from outside, big raindrops bouncing off the roof, {child} looking up from the window." },
+    { w: { child: RAINCOAT }, t: "{child} and {adult} go out. Rain is fun!", d: "{child} and {adult} step out into the rain, faces up, laughing, {pet} running ahead." },
+    { w: { child: MUDDY }, x: { child: 0.3 }, g: "a big, wide, squelchy brown mud puddle with blobs of mud flying up", t: "{child} hops in the mud. Mud is on the boots!", d: "{child} hops in a big muddy patch, mud splattered up red wellington boots.",
+      set: "A grassy park with tall trees, a wooden fence and a winding path, in light rain. Nothing at all lies in or near the mud: no boots, shoes, clothes or toys" },
+    { w: { child: MUDDY, pet: MUDDY_PET }, x: { pet: 0.56 }, p: { pet: "roll" }, g: "a big, churned-up, squelchy brown mud patch with mud splattered around it", t: "{pet} rolls in the mud. Now {pet} is all covered in mud!", d: "{pet} rolls on its back in the mud, completely brown, looking delighted.",
+      set: "A grassy park with tall trees, a wooden fence and a winding path, in light rain" },
+    { w: { child: MUDDY }, x: { child: 0.2 }, t: "Look! A duck is in the rain. Quack, quack!", d: "A cheerful duck waddles past in the rain; {child} points at it.",
+      set: "A grassy park with tall trees, a wooden fence and a winding path, in the rain. " + DUCK + " waddles along the grass in the open at about 55% across, in the middle distance, with clear grass all around it and nothing in front of it; the bottom left of the picture is open wet grass" },
+    { w: { child: MUDDY }, x: { child: 0.76 }, t: "The duck has fun in the wet. {child} has fun too.", d: "The duck flaps in a puddle beside {child}, who copies it with arms out like wings.",
+      set: "A grassy park with tall trees, a wooden fence and a winding path, in the rain. In the foreground, from about 30% to 60% across, a big shallow rain puddle where " + DUCK.toLowerCase() + " splashes happily, wings flapping and water drops flying. It is the only duck or bird in the picture. The bottom right is open wet grass" },
+    { w: { child: RAINCOAT }, t: "Then the sun is out. The rain has gone.", d: "The sun breaks through the clouds, a rainbow over the garden, everything shining and wet.",
+      set: "A cottage garden just after the rain: the sun shining brightly in a blue sky as the last clouds drift away, a rainbow over the garden, wet grass and flowers sparkling and puddles reflecting the sky. No rain is falling anywhere" },
+    { w: { child: MUDDY, adult: "+with brown mud splashed up their trousers and shoes", pet: MUDDY_PET }, t: "{child}, {adult} and {pet} go back in. Mud, mud, mud! A bath for all!", d: "Back indoors, all three are covered in mud; a bubbly bath waits through the bathroom door.",
+      set: "Back indoors in a hallway with a tiled floor covered in muddy footprints, muddy paw prints and splodges of mud. On the right, through an open door, a bathroom with a big bubbly bath waiting" }
   ]},
   { id: "s3-fish", stage: 3, title: "The big fish", blurb: "There is a big fish in the park pool. Can {child} get it with a net?", cast: ["child", "adult", "pet"], pages: [
     { t: "{child} and {adult} go to the pool in the park.", d: "{child} and {adult} walk through a sunny park towards a small pond with reeds." },
@@ -243,15 +262,15 @@ FLR.readers = [
     { t: "The next morning, {pet} ran into the garden. {pet} jumped up and down. {pet} was well again!", d: "Morning in the garden; {pet} leaps happily on the grass, bandage gone; {child} and {adult} cheer at the back door." }
   ]},
   { id: "s4-swim", stage: 4, title: "In the swimming pool", blurb: "Armbands on, a big splash, and the first swim with no help.", cast: ["child", "adult"], pages: [
-    { w: { child: "a bright blue swimming costume with a little yellow star and orange armbands" }, t: "{child} and {adult} went to the swimming pool. {child} had a bag with a towel and armbands.", d: "Outside a leisure centre; {child} carries a swim bag, {adult} holds the door." },
-    { w: { child: "a bright blue swimming costume with a little yellow star and orange armbands" }, t: "The pool was big and blue. It had a slide and a fountain that went splash.", d: "A bright indoor swimming pool with a curly slide and a little fountain; {child} stares in delight." },
-    { w: { child: "a bright blue swimming costume with a little yellow star and orange armbands" }, t: "{child} put the armbands on and got into the shallow end. The water was cool.", d: "{child} in orange armbands steps down the pool steps into shallow water." },
-    { w: { child: "a bright blue swimming costume with a little yellow star and orange armbands" }, t: "{adult} held {child}'s hands. \"Kick, kick, kick!\" said {adult}. Splash, splash!", d: "{adult} in the water holds {child}'s hands as {child} kicks, splashing water everywhere." },
-    { w: { child: "a bright blue swimming costume with a little yellow star and orange armbands" }, t: "Then {child} went down the slide. Whoosh! Splash! {child} came up with a big grin.", d: "{child} zooms off the end of the slide into the water with a splash." },
-    { w: { child: "a bright blue swimming costume with a little yellow star and orange armbands" }, t: "\"Can I swim with no armbands?\" said {child}. \"Let us try,\" said {adult}.", d: "{child} takes off one armband, looking determined; {adult} stands ready a little way off." },
-    { w: { child: "a bright blue swimming costume with a little yellow star and orange armbands" }, t: "{adult} stood a little way off. {child} kicked and swam and kicked and swam.", d: "{child} swims a few strokes towards {adult}, chin up, kicking hard." },
-    { w: { child: "a bright blue swimming costume with a little yellow star and orange armbands" }, t: "{child} got to {adult}! \"I did it!\" said {child}. \"I swam all on my own!\"", d: "{child} reaches {adult}'s arms; both are cheering." },
-    { w: { child: "a bright blue swimming costume with a little yellow star and orange armbands" }, t: "A lifeguard gave {child} a thumbs up. \"Well done!\" she said.", d: "A smiling lifeguard on a tall chair gives a thumbs up." },
+    { w: { child: SWIM_CHILD }, t: "{child} and {adult} went to the swimming pool. {child} had a bag with a towel and armbands.", d: "Outside a leisure centre; {child} carries a swim bag, {adult} holds the door." },
+    { w: { child: SWIM_CHILD }, t: "The pool was big and blue. It had a slide and a fountain that went splash.", d: "A bright indoor swimming pool with a curly slide and a little fountain; {child} stares in delight." },
+    { w: { child: SWIM_CHILD }, t: "{child} put the armbands on and got into the shallow end. The water was cool.", d: "{child} in orange armbands steps down the pool steps into shallow water." },
+    { w: { child: SWIM_CHILD, adult: SWIM_ADULT }, t: "{adult} held {child}'s hands. \"Kick, kick, kick!\" said {adult}. Splash, splash!", d: "{adult} in the water holds {child}'s hands as {child} kicks, splashing water everywhere." },
+    { w: { child: SWIM_CHILD }, t: "Then {child} went down the slide. Whoosh! Splash! {child} came up with a big grin.", d: "{child} zooms off the end of the slide into the water with a splash." },
+    { w: { child: SWIM_CHILD, adult: SWIM_ADULT }, t: "\"Can I swim with no armbands?\" said {child}. \"Let us try,\" said {adult}.", d: "{child} takes off one armband, looking determined; {adult} stands ready a little way off." },
+    { w: { child: SWIM_CHILD, adult: SWIM_ADULT }, t: "{adult} stood a little way off. {child} kicked and swam and kicked and swam.", d: "{child} swims a few strokes towards {adult}, chin up, kicking hard." },
+    { w: { child: SWIM_CHILD, adult: SWIM_ADULT }, t: "{child} got to {adult}! \"I did it!\" said {child}. \"I swam all on my own!\"", d: "{child} reaches {adult}'s arms; both are cheering." },
+    { w: { child: SWIM_CHILD }, t: "A lifeguard gave {child} a thumbs up. \"Well done!\" she said.", d: "A smiling lifeguard on a tall chair gives a thumbs up." },
     { t: "Then they had chips in the café. {child} felt so proud and so hungry!", d: "In the leisure centre café, {child} with damp hair eats chips next to {adult}, holding up a swimming certificate." }
   ]}
 ];

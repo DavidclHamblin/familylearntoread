@@ -8,7 +8,7 @@ var FLR = (typeof window !== "undefined" ? (window.FLR = window.FLR || {}) : {})
   "use strict";
   var L = F.layers = {};
   L.PEOPLE = ["stand", "walk", "wave", "point", "cheer", "hold", "crouch", "sit"];
-  L.PETS = ["stand", "sit", "run", "lie"];
+  L.PETS = ["stand", "sit", "run", "lie", "roll"];
   // Words in a character's part of the picture description, and the pose they get: [pattern, person, pet].
   var RULES = [
     [/\b(wav(e|es|ing))\b/, "wave", "stand"],
@@ -21,7 +21,7 @@ var FLR = (typeof window !== "undefined" ? (window.FLR = window.FLR || {}) : {})
     [/\b(walk|stroll|run|race|trot|follow|head|go|went|set off)/, "walk", "run"]
   ];
   var HEIGHT = { adult: 0.74, child: 0.56, pet: 0.3 };  // of the picture's height, standing
-  var SHRINK = { sit: 0.68, crouch: 0.7, lie: 0.62, cheer: 1.06 };
+  var SHRINK = { sit: 0.68, crouch: 0.7, lie: 0.62, roll: 0.6, cheer: 1.06 };
 
   // The part of the description about this role: from its {role} to the next role or the end of the clause.
   function partFor(d, role) {
@@ -53,7 +53,7 @@ var FLR = (typeof window !== "undefined" ? (window.FLR = window.FLR || {}) : {})
     });
     return out;
   };
-  // For each page: { side: where the words go, figures: [{ role, outfit, pose, slot }] }.
+  // For each page: { side: where the words go, figures: [{ role, outfit, pose, slot, x }] } (x: a fixed place, 0–1 across).
   L.plan = function (book) {
     var outfits = L.outfits(book);
     return book.pages.map(function (p, i) {
@@ -63,7 +63,7 @@ var FLR = (typeof window !== "undefined" ? (window.FLR = window.FLR || {}) : {})
         var pose = (p.p && p.p[r]) || L.poseFor(p.d, r);
         if (!pose) return;
         var outfit = outfits[i][r] || "costume";
-        figs.push({ role: r, outfit: outfit, pose: pose, slot: "pose-" + r + "-" + outfit + "-" + pose });
+        figs.push({ role: r, outfit: outfit, pose: pose, slot: "pose-" + r + "-" + outfit + "-" + pose, x: p.x && p.x[r] });
       });
       if (!figs.length && /\b(all three|everyone|the family|both of them|together)\b/i.test(p.d))  // the whole cast, unnamed
         book.cast.slice().sort(function (a, b) { return ["adult", "child", "pet"].indexOf(a) - ["adult", "child", "pet"].indexOf(b); }).forEach(function (r) {
@@ -114,6 +114,37 @@ var FLR = (typeof window !== "undefined" ? (window.FLR = window.FLR || {}) : {})
     });
     return keyed[url];
   };
+  // The painter sometimes draws a thin "book fold" line straight down the middle of a set. Finds a column near the
+  // middle that differs from both neighbours (which match each other) on most rows, and blends it away.
+  L.unseam = function (g, W, H) {
+    var r = Math.max(4, Math.round(W * 0.012)), x0 = Math.round(W / 2) - r - 4, w = 2 * r + 8, step = Math.max(1, Math.floor(H / 300));
+    var img = g.getImageData(x0, 0, w, H), d = img.data, lum = function (x, y) { var o = (y * w + x) * 4; return d[o] * 0.3 + d[o + 1] * 0.59 + d[o + 2] * 0.11; };
+    var bad = [];
+    for (var x = 4; x < w - 4; x++) {
+      var hit = 0, n = 0;
+      for (var y = 0; y < H; y += step) {
+        var a = lum(x - 3, y), b = lum(x + 3, y), m = lum(x, y); n++;
+        if (Math.abs(a - b) < 14 && Math.abs(m - (a + b) / 2) > 10) hit++;
+      }
+      bad.push(hit / n > 0.45);
+    }
+    var fixed = 0;
+    for (var i = 0; i < bad.length; i++) {
+      if (!bad[i]) continue;
+      var j = i; while (j + 1 < bad.length && bad[j + 1]) j++;
+      if (j - i < 6) {  // a thin line, not a real edge in the picture
+        var L0 = i + 4 - 2, R0 = j + 4 + 2;
+        for (var y2 = 0; y2 < H; y2++) for (var xx = L0 + 1; xx < R0; xx++) {
+          var t = (xx - L0) / (R0 - L0), o = (y2 * w + xx) * 4, oa = (y2 * w + L0) * 4, ob = (y2 * w + R0) * 4;
+          for (var k = 0; k < 3; k++) d[o + k] = d[oa + k] * (1 - t) + d[ob + k] * t;
+        }
+        fixed++;
+      }
+      i = j;
+    }
+    if (fixed) g.putImageData(img, x0, 0);
+    return fixed;
+  };
   // Paints a set with its figures onto canvas c (any size, 16:9 is best). page: one entry of L.plan();
   // url(slot) gives each picture's address. Resolves when done; rejects if the set is missing.
   L.paint = function (c, sceneUrl, page, url) {
@@ -122,12 +153,13 @@ var FLR = (typeof window !== "undefined" ? (window.FLR = window.FLR || {}) : {})
         var W = c.width, H = c.height, g = c.getContext("2d"), scene = got[0];
         var s = Math.max(W / scene.naturalWidth, H / scene.naturalHeight);
         g.drawImage(scene, (W - scene.naturalWidth * s) / 2, (H - scene.naturalHeight * s) / 2, scene.naturalWidth * s, scene.naturalHeight * s);
+        try { L.unseam(g, W, H); } catch (e) {}  // a canvas from another site without CORS can't be read; leave it
         var figs = page.figures.map(function (f, i) { return { f: f, img: got[i + 1] }; }).filter(function (x) { return x.img; });
         var zone = page.side === "right" ? [0.05, 0.64] : [0.36, 0.95], flip = page.side === "left", ground = 0.95 * H;
         figs.forEach(function (x, i) {
           var hgt = HEIGHT[x.f.role] * (SHRINK[x.f.pose] || 1) * (figs.length === 1 && x.f.role === "pet" ? 1.6 : 1) * H, wid = hgt * x.img.width / x.img.height;
           var at = zone[0] + (zone[1] - zone[0]) * (flip ? (figs.length - i) : (i + 1)) / (figs.length + 1);
-          var cx = at * W, left = cx - wid / 2;
+          var cx = (x.f.x != null ? x.f.x : at) * W, left = cx - wid / 2;
           g.save(); g.fillStyle = "rgba(30,26,51,.16)"; g.beginPath(); g.ellipse(cx, ground - 2, wid * 0.42, hgt * 0.035, 0, 0, Math.PI * 2); g.fill(); g.restore();
           g.save();
           if (flip) { g.translate(cx * 2, 0); g.scale(-1, 1); }
