@@ -88,6 +88,7 @@
         (x.parts || []).forEach(function (g) { if (g.length > 1 && g.charAt(0) !== "+" && !found[g]) found[g] = w.toLowerCase(); });
       });
     });
+    (b.teach || []).forEach(function (w) { tricky[w] = 1; });  // a word above the stage that the book needs, taught here
     return { sounds: found, tricky: Object.keys(tricky) };
   }
   F.bookSounds = sounds;

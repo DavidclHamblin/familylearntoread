@@ -5,7 +5,8 @@
    a different outfit on that page (otherwise everyone wears the same clothes in every book). Optional picture
    fields: "p" fixes a character's pose, "x" places a character (0 = left edge, 1 = right edge), "set" describes the
    empty scene for the painter when "d" alone would put things in the wrong place, and "g" is the ground the
-   characters stand in (mud, a puddle).
+   characters stand in (mud, a puddle). A book's "teach" lists words above its stage that it needs; they are
+   shown with the tricky words at the back.
    tools/check_stories.js checks every page at its stage; run it after any change. */
 var FLR = (typeof window !== "undefined" ? (window.FLR = window.FLR || {}) : {});
 
@@ -22,6 +23,11 @@ var MUDDY = RAINCOAT + ", with splashes of brown mud up the boots and jeans";
 var MUDDY_PET = "+covered all over in thick brown mud from nose to tail, the fur caked and dripping with it, looking very pleased";
 var SWIM_CHILD = "bright blue swimwear with a little yellow star (a swimming costume for a girl, swim shorts and a swim top for a boy) and orange armbands";
 var SWIM_ADULT = "plain navy swimwear for the pool (a swimming costume for a woman, swim shorts for a man)";
+var NET = "a small fishing net with a round green rim, a short wooden handle and white netting";
+var JAR = "an empty glass jam jar with a red lid";
+var NET_JAR = "+carrying " + NET + " in one hand and " + JAR + " in the other";
+var NET_UP = "+holding up " + NET + ", empty and dripping, in one hand and " + JAR + " in the other, looking surprised with eyes wide and mouth open";
+var FISH = "A big golden-orange fish with big friendly eyes and a long, flowing, floaty tail";
 var DUCK = "A cheerful round yellow cartoon duck with an orange beak and orange webbed feet, wearing no clothes";
 
 FLR.readers = [
@@ -45,17 +51,31 @@ FLR.readers = [
     { w: { child: MUDDY, adult: "+with brown mud splashed up their trousers and shoes", pet: MUDDY_PET }, t: "{child}, {adult} and {pet} go back in. Mud, mud, mud! A bath for all!", d: "Back indoors, all three are covered in mud; a bubbly bath waits through the bathroom door.",
       set: "Back indoors in a hallway with a tiled floor covered in muddy footprints, muddy paw prints and splodges of mud. On the right, through an open door, a bathroom with a big bubbly bath waiting" }
   ]},
-  { id: "s3-fish", stage: 3, title: "The big fish", blurb: "There is a big fish in the park pool. Can {child} get it with a net?", cast: ["child", "adult", "pet"], pages: [
-    { t: "{child} and {adult} go to the pool in the park.", d: "{child} and {adult} walk through a sunny park towards a small pond with reeds." },
-    { t: "{pet} will go too.", d: "{pet} trots behind them with its tail high." },
-    { t: "{child} has a net and a jar.", d: "{child} holds up a little fishing net and an empty glass jar, grinning." },
-    { t: "Look in the pool. Fish! A lot of fish!", d: "Looking down into the clear pond: lots of small orange and silver fish." },
-    { t: "A big fish is in the weeds. It has a long tail.", d: "A big golden fish with a long flowing tail hides among green water weeds." },
-    { t: "{child} dips the net in. Can {child} get the big fish?", d: "{child} kneels at the edge and dips the net into the water, concentrating hard." },
-    { t: "No! The fish is too quick. Zip! Zoom!", d: "The big fish darts away in a swirl of bubbles; the net comes up empty." },
-    { t: "{pet} looks in the pool. {pet} sees the big fish.", d: "{pet} leans right over the edge, nose almost touching the water, staring at the big fish." },
-    { t: "Then {pet} falls in the pool. {pet} is wet!", d: "{pet} tumbles into the shallow pond with a big splash; the fish swims off." },
-    { t: "{adult} gets {pet} back. No fish, but lots of fun!", d: "{adult} lifts a soggy {pet} out of the water while {child} laughs." }
+  { id: "s3-fish", stage: 3, teach: ["pond"], title: "The big fish", blurb: "There is a big fish in the park pond. Can {child} get it with a net?", cast: ["child", "adult", "pet"], pages: [
+    { w: { child: NET_JAR }, t: "{child} and {adult} go to the pond in the park.", d: "{child} and {adult} walk through a sunny park towards a small pond with reeds.",
+      set: "A sunny park with a small pond fringed with reeds and lily pads, trees behind. A path leads towards the pond. Nothing lies on the ground" },
+    { t: "{pet} will go too.", d: "{pet} trots behind them with its tail high.",
+      set: "A sunny park with a small pond fringed with reeds and lily pads, trees behind, seen from the path: one continuous view with the same grass, path and sky all the way across" },
+    { w: { child: NET_JAR }, x: { child: 0.3 }, t: "{child} has a net and a jar.", d: "{child} holds up a little fishing net and an empty glass jar, grinning.",
+      set: "A sunny park with a small pond fringed with reeds and lily pads, trees behind, on a sunny day. Nothing at all lies on the ground or on the rocks: no net, jar, bucket or toys" },
+    { t: "Look in the pond. Fish! A lot of fish!", d: "Looking down into the clear pond: lots of small orange and silver fish.",
+      set: "Looking down into a clear, shallow park pond from the bank: lots of small orange and silver fish swimming among pebbles, weeds and lily pads, one continuous view of water" },
+    { t: "A big fish is in the weeds. It has a long tail.", d: "A big golden fish with a long flowing tail hides among green water weeds.",
+      set: "Under the water of the park pond, one continuous underwater view: " + FISH + " hides among tall green water weeds, near the middle of the left half" },
+    { w: { child: NET_JAR }, x: { child: 0.66 }, t: "{child} dips the net in. Can {child} get the big fish?", d: "{child} kneels at the edge and dips the net into the water, concentrating hard.",
+      g: "the grassy, muddy bank right at the water's edge, with the pond water just in front, on its left",
+      set: "A sunny park with a small pond fringed with reeds and lily pads, trees behind. The pond fills the foreground on the left half of the picture, right down to the bottom edge, with the bank and grass on the right. Nothing lies on the bank: no net, jar or bucket" },
+    { w: { child: NET_UP }, x: { child: 0.3 }, t: "No! The fish is too quick. Zip! Zoom!", d: "{child} holds up the empty net, surprised, as the big fish darts away in a swirl of bubbles.",
+      g: "the grassy bank at the water's edge",
+      set: "A sunny park with a small pond fringed with reeds and lily pads, trees behind. In the pond, at about 55% across, " + FISH.replace(/^A /, "the ") + " darts away in a swirl of bubbles and ripples. Nothing lies on the bank" },
+    { w: { pet: "+leaning right forward with its head stretched down low, nose almost touching the water, staring hard" }, x: { pet: 0.74 }, t: "{pet} looks in the pond. {pet} sees the big fish.", d: "{pet} leans right over the edge, nose almost touching the water, staring at the big fish.",
+      g: "the grassy bank at the very edge of the pond",
+      set: "A sunny park with a small pond fringed with reeds and lily pads, trees behind. The clear pond water fills the foreground from about 35% to 62% across, right down to the bottom edge, and in it, at about 50% across, " + FISH.replace(/^A /, "the ") + " looks up out of the water" },
+    { w: { pet: "+soaking wet, standing in shallow pond water up to its tummy with a big splash of water flying up around it" }, x: { pet: 0.33 }, p: { pet: "stand" }, t: "Then {pet} falls in the pond. {pet} is wet!", d: "{pet} tumbles into the shallow pond with a big splash; the fish swims off.",
+      g: "the shallow pond water itself, with ripples and splashes, reaching the bottom edge",
+      set: "A sunny park with a small pond fringed with reeds and lily pads, trees behind. The pond fills the whole foreground. Far off in the water at about 60% across, " + FISH.replace(/^A /, "the ") + " swims away" },
+    { w: { child: NET_JAR, pet: "+soaking wet, the fur flattened and dripping with pond water, drops falling all around it" }, t: "{adult} gets {pet} back. No fish, but lots of fun!", d: "{adult} has pulled {pet} out of the pond; {pet} stands dripping wet while {child} laughs.",
+      set: "A sunny park with a small pond fringed with reeds and lily pads, trees behind, seen from the grassy bank. Wet paw prints and a puddle of pond water on the path" }
   ]},
   { id: "s3-owl", stage: 3, title: "The night owl", blurb: "Hoot, hoot! Who is in the garden at night?", cast: ["child", "adult", "pet"], pages: [
     { w: { child: "cosy blue pyjamas with little stars and slippers" }, t: "It is night. {child} is in bed. {child} hears a hoot.", d: "{child} in bed at night, eyes open, moonlight through the curtains." },
