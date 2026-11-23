@@ -61,7 +61,7 @@ FLR.readers = [
     { t: "Look in the pond. Fish! A lot of fish!", d: "Looking down into the clear pond: lots of small orange and silver fish.",
       set: "Looking down into a clear, shallow park pond from the bank: lots of small orange and silver fish swimming among pebbles, weeds and lily pads, one continuous view of water" },
     { t: "A big fish is in the weeds. It has a long tail.", d: "A big golden fish with a long flowing tail hides among green water weeds.",
-      set: "Under the water of the park pond, seen from the side: ONE continuous underwater view with the same blue-green water colour and the same pebbly pond floor running all the way across, and tall green water weeds swaying across the whole width. " + FISH + " hides among the weeds, near the middle of the left half" },
+      set: "Looking down into the clear, shallow park pond from the grassy bank, one continuous view of water with pebbles, lily pads and tall green water weeds across the whole width. " + FISH + " hides among the weeds, near the middle of the left half, its long tail showing" },
     { w: { child: NET_JAR }, x: { child: 0.66 }, t: "{child} dips the net in. Can {child} get the big fish?", d: "{child} kneels at the edge and dips the net into the water, concentrating hard.",
       g: "the grassy, muddy bank right at the water's edge, with the pond water just in front, on its left",
       set: "A sunny park with a small pond fringed with reeds and lily pads, trees behind. The pond fills the foreground on the left half of the picture, right down to the bottom edge, with the bank and grass on the right. Nothing lies on the bank: no net, jar or bucket" },
