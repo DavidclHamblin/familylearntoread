@@ -19,7 +19,7 @@ FLR.readerRoles = [
 /* Outfits used on more than one page of a book. A "+" outfit keeps the usual clothes and adds to them. */
 var RAINCOAT = "a bright red raincoat with the hood down, blue jeans and red wellington boots";
 var MUDDY = RAINCOAT + ", with splashes of brown mud up the boots and jeans";
-var MUDDY_PET = "+covered all over in splodges of brown mud, looking very pleased";
+var MUDDY_PET = "+covered all over in thick brown mud from nose to tail, the fur caked and dripping with it, looking very pleased";
 var SWIM_CHILD = "bright blue swimwear with a little yellow star (a swimming costume for a girl, swim shorts and a swim top for a boy) and orange armbands";
 var SWIM_ADULT = "plain navy swimwear for the pool (a swimming costume for a woman, swim shorts for a man)";
 var DUCK = "A cheerful round yellow cartoon duck with an orange beak and orange webbed feet, wearing no clothes";
