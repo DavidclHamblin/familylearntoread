@@ -26,6 +26,6 @@
   });
   document.querySelectorAll("[data-family]").forEach(function (img) {
     img.addEventListener("error", function () { var f = img.closest("figure"); if (f) f.hidden = true; });
-    img.src = API + "/api/sets/example/c-" + img.getAttribute("data-family") + "?w=web";
+    img.src = API + "/api/sets/example/c-" + img.getAttribute("data-family") + "?w=web&v=" + L.ART;
   });
 })();
