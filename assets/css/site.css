@@ -656,6 +656,9 @@ textarea { min-height: 90px; resize: vertical; }
 .peek-words b { color: #E2492C; font-weight: 700; }
 .peek figcaption { padding: 8px 18px 16px; font-size: 14px; color: #5B5670; border-top: 3px solid var(--bc); margin: 8px 18px 0; padding-left: 0; padding-right: 0; }
 .family-row { margin-top: 32px; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr); gap: 28px; align-items: center; }
+.family-row h3 { margin: 0 0 10px; }
+.family-row .muted { margin: 0 0 26px; }
+.family-row p:last-child { margin: 0; }
 .family-figs { display: flex; gap: 14px; justify-content: center; align-items: flex-end; }
 .family-figs figure { margin: 0; text-align: center; font-size: 14px; flex: 1 1 0; min-width: 0; }
 .family-figs img { width: 100%; max-width: 180px; height: auto; aspect-ratio: 3 / 4; object-fit: contain; background: #fff; border-radius: 14px; border: 2px solid var(--line, #E5DED0); }
