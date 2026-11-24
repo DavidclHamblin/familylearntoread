@@ -22,6 +22,7 @@
       if (after) after.innerHTML = words(b.pages[n].t);  // the hero keeps its own words until its picture is painted
     }).catch(function () {
       if (el.hasAttribute("data-optional")) el.hidden = true;
+      else el.classList.add("failed");
     });
   });
   document.querySelectorAll("[data-family]").forEach(function (img) {

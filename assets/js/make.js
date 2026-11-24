@@ -1,15 +1,15 @@
 /* Family Learn to Read: "Make your characters" (make.html).
    The family adds a photo for the reader, the grown-up and the pet, and the shared photo and cartoon
    service draws each one once, in the style every Learn to Read book shares. Then one page of their first
-   book is painted with them, free. After ordering, the characters are copied into every book in the pack
+   book is painted with them, free: our empty scene plus their cut-outs standing in it (preview.js, layers.js). After ordering, the characters are copied into every book in the pack
    (POST /api/drafts/<id>/copy) and the rest of the pages are painted from them.
    Photos are shrunk and stripped of hidden data (such as location) in the browser before upload, kept in
    private storage, and never shown anywhere except back to this browser. */
 (function () {
   "use strict";
-  var F = window.FLR, esc = F.esc;
+  var F = window.FLR, esc = F.esc, P = F.preview;
   var root = document.querySelector("[data-maker]");
-  if (!root || !F.readers) return;
+  if (!root || !F.readers || !P) return;
   var roles = F.readerRoles, names = F.loadNames(), pack = F.loadPack();
   var byId = {}; F.readers.forEach(function (b) { byId[b.id] = b; });
   var first = byId[(pack.ids || [])[0]] || F.readers[0];
@@ -62,7 +62,7 @@
       img.src = url;
     });
   }
-  function slot(k) { return /^s\d+$/.test(k) ? k : "c-" + k; }
+  function slot(k) { return "c-" + k; }
   function fetchToon(d, k) {
     return req("GET", "/api/drafts/" + d.id + "/cartoons/" + slot(k) + "?w=web", d).then(function (b) {
       if (toons[k]) URL.revokeObjectURL(toons[k]);
@@ -83,6 +83,7 @@
       return req("POST", "/api/drafts/" + d.id + "/cartoons/" + slot(k), d, body);
     }).then(function (j) {
       status = j; if (upload) delete files[k];
+      P.stalePose(d, k);
       return fetchToon(d, k);
     }).then(function () { busy[k] = false; }, function (e) {
       busy[k] = false; errors[k] = e.message;
@@ -107,32 +108,40 @@
     }).then(function (d) {
       btn.disabled = false;
       if (roles.some(function (r) { return errors[r.key]; })) { if (!/free/i.test(msg.textContent)) msg.textContent = "Some characters couldn't be drawn. You can try those again, or use a different photo."; return; }
-      if (!toons.s) paintSample(d, true); else msg.textContent = "Here they are!";
+      if (!painted) paintSample(d, true); else msg.textContent = "Here they are!";
     }, function (e) { btn.disabled = false; msg.textContent = e.message; });
   }
 
   // ---------- one free page painted with the family ----------
-  var sample = root.querySelector(".mk-sample"), sampleBusy = false;
-  function samplePage(b) {
-    // The first page whose characters are all drawn, preferring one with the reader in it.
-    for (var i = 0; i < b.pages.length; i++) {
-      var cast = b.cast.filter(function (k) { return b.pages[i].d.indexOf("{" + k + "}") >= 0; });
-      if (cast.indexOf("child") >= 0 && cast.every(function (k) { return toons[k]; })) return i + 1;
-    }
-    return 0;
+  // A page of their first book where everyone stands (or our farm page): our empty scene with their cut-outs in it.
+  // The standing poses are the same ones the home page preview uses, so a family never pays for them twice.
+  var sample = root.querySelector(".mk-sample"), sampleBusy = false, painted = false, poseUrls = {};
+  function samplePage(d) {
+    var b = bookOf(d), n = P.standPage(b);
+    if (!n) { b = byId[P.HOME_PAGES[0][0]]; n = P.HOME_PAGES[0][1]; }
+    return { book: b, n: n };
   }
-  function stale(k) { if (k !== "s" && toons.s) { URL.revokeObjectURL(toons.s); delete toons.s; } }
+  function stale(k) { painted = false; }
+  function drawnRoles() { return roles.map(function (r) { return r.key; }).filter(function (k) { return toons[k]; }); }
+  function showSample(d, poses) {
+    var sp = samplePage(d), p = sp.book.pages[sp.n - 1];
+    sample.innerHTML = '<p class="eyebrow">Painted with your family</p><div class="bv-page bv-spread side-right"><div class="bv-pic"><canvas width="1600" height="900" aria-hidden="true"></canvas></div><div class="bv-text"><p>' + fill(p.t) +
+      '</p></div></div><p class="small muted">A page of “' + esc(sp.book.title) + "”. Every page of every book in your pack is painted the same way after you order.</p>";
+    return P.paint(sample.querySelector("canvas"), sp.book, sp.n, poses).then(function () { painted = true; });
+  }
   function paintSample(d, after) {
-    var b = bookOf(d), n = samplePage(b);
-    if (!n || sampleBusy) return;
+    if (sampleBusy || !toons.child) return;
     sampleBusy = true; paint();
-    msg.textContent = (after ? "Here are your characters! Now we're painting a page of “" + b.title + "” with them. This takes about a minute…" : "Painting a page with your family…");
-    req("POST", "/api/drafts/" + d.id + "/cartoons/s" + n, d, { story: b.id }).then(function (j) {
-      status = j; d.sample = n; try { localStorage.setItem(DKEY, JSON.stringify(d)); } catch (e) {}
-      return req("GET", "/api/drafts/" + d.id + "/cartoons/s" + n + "?w=web", d);
-    }).then(function (blob) {
-      toons.s = URL.createObjectURL(blob); msg.textContent = "Done! Here is a page of your first book.";
-    }, function (e) { msg.textContent = e.message; }).then(function () { sampleBusy = false; paint(); showLeft(); });
+    msg.textContent = after ? "Here are your characters! Now we're painting a page with them…" : "Painting a page with your family…";
+    req("GET", "/api/drafts/" + d.id, d).then(function (st) {
+      return P.poses(d, drawnRoles(), st.cartoons || [], kind, bookOf(d).id);
+    }).then(function (r) {
+      Object.keys(poseUrls).forEach(function (s) { URL.revokeObjectURL(poseUrls[s]); });
+      poseUrls = r.urls;
+      if (r.errors.length) throw r.errors[0];
+      return showSample(d, poseUrls);
+    }).then(function () { msg.textContent = "Done! Here is a page of your first book."; }, function (e) { msg.textContent = e.message; })
+      .then(function () { sampleBusy = false; paint(); showLeft(); });
   }
 
   // ---------- the cards ----------
@@ -165,15 +174,11 @@
       st.textContent = busy[k] ? "Drawing " + name(k) + "…" : errors[k] ? errors[k] : files[k] ? "Ready to draw." : toons[k] ? "Drawn." : standin[k] ? "We'll draw our own stand-in." : "";
       st.className = "mk-state" + (errors[k] ? " bad" : "");
     });
-    var d = saved(), b = d ? bookOf(d) : first, n = samplePage(b);
-    sample.hidden = !toons.s && !sampleBusy;
-    if (toons.s) {
-      var p = b.pages[(d && d.sample ? d.sample : n || 1) - 1];
-      sample.innerHTML = '<p class="eyebrow">Painted with your family</p><div class="bv-page bv-spread side-right"><div class="bv-pic"><img src="' + toons.s + '" alt=""></div><div class="bv-text"><p>' + fill(p.t) +
-        '</p></div></div><p class="small muted">A page of “' + esc(b.title) + "”. Every page of every book in your pack is painted the same way after you order.</p>";
-    } else if (sampleBusy) sample.innerHTML = '<p class="muted">Painting a page with your family…</p>';
+    var d = saved();
+    sample.hidden = !painted && !sampleBusy;
+    if (sampleBusy && !painted) sample.innerHTML = '<p class="muted">Painting a page with your family…</p>';
     var paintBtn = root.querySelector(".mk-scenes");
-    paintBtn.hidden = !d || !!toons.s || !n || sampleBusy;
+    paintBtn.hidden = !d || painted || !toons.child || sampleBusy;
     root.querySelector(".mk-next").hidden = !toons.child;
   }
   cards.addEventListener("input", function (e) {
@@ -207,7 +212,8 @@
   root.querySelector(".mk-delete").addEventListener("click", function () {
     var d = saved();
     var done = function () {
-      forget(); status = null;
+      forget(); status = null; painted = false; sample.innerHTML = "";
+      Object.keys(poseUrls).forEach(function (k) { URL.revokeObjectURL(poseUrls[k]); }); poseUrls = {};
       Object.keys(toons).forEach(function (k) { URL.revokeObjectURL(toons[k]); });
       Object.keys(previews).forEach(function (k) { URL.revokeObjectURL(previews[k]); });
       toons = {}; previews = {}; files = {}; errors = {};
@@ -233,8 +239,9 @@
       status = st; showLeft();
       var ks = roles.map(function (r) { return r.key; }).filter(function (k) { return st.cartoons.indexOf(slot(k)) >= 0; });
       return Promise.all(ks.map(function (k) { return fetchToon(d0, k).catch(function () {}); })).then(function () {
-        if (d0.sample && st.cartoons.indexOf("s" + d0.sample) >= 0)
-          return req("GET", "/api/drafts/" + d0.id + "/cartoons/s" + d0.sample + "?w=web", d0).then(function (b) { toons.s = URL.createObjectURL(b); }, function () {});
+        // Paint the page straight away if every drawn character already has an up-to-date pose (nothing new is drawn).
+        var ready = toons.child && ks.every(function (k) { return d0.poses && d0.poses[k] && st.cartoons.indexOf(P.poseSlot(k)) >= 0; });
+        if (ready) return P.poses(d0, ks, st.cartoons, kind, bookOf(d0).id).then(function (r) { poseUrls = r.urls; return showSample(d0, poseUrls); }).catch(function () {});
       });
     }).then(paint, function (e) { if (e.status === 404 || e.status === 403) forget(); });
   }

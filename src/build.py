@@ -4,7 +4,7 @@ python3 src/build.py  ->  dist/  (the real site, for GitHub Pages)
 Stages, sound packs, school schemes and prices live in assets/js/data.js; this script reads it with node,
 so there is one source of truth.
 """
-import hashlib, json, shutil, subprocess
+import hashlib, json, re, shutil, subprocess
 from pathlib import Path
 from html import escape as e
 
@@ -125,16 +125,24 @@ POND = ('<svg viewBox="0 0 400 240" aria-hidden="true"><rect width="400" height=
         + '</svg>')
 
 
+def hero_words():
+    """The hero page's own words with our example names, so nothing changes when its picture is painted."""
+    roles = {"child": "Sam", "adult": "Mum", "pet": "Biscuit"}
+    b = next(x for x in READERS if x["id"] == "s3-rain")
+    return re.sub(r"\{(\w+)\}", lambda m: "<b>" + e(roles.get(m.group(1), m.group(1))) + "</b>", e(b["pages"][4]["t"]))
+
+
 def sample_page():
     """A sample Stage 3 page: picture on top, words below, the sound being practised picked out."""
     return f"""<figure class="reader" aria-label="A sample page from a Stage 3 reader" data-sample="s3-rain:5">
 <div class="reader-pic">{POND}<canvas width="1600" height="900" aria-hidden="true"></canvas></div>
-<p class="reader-text" data-words-after>Mia and Dad look at the <b>f</b><b>i</b><b class="hl">sh</b>.<br>It has a long tail!</p>
+<p class="reader-text" data-words-after>{hero_words()}</p>
 <figcaption class="small">Example page, Stage 3 (Yellow band). Your book shows your own family, drawn from your photos.</figcaption>
 </figure>"""
 
 
 SAMPLES = [("s3-owl", 8), ("s4-tent", 4), ("s4-snow", 7)]  # pages that layer well
+TRY_PAGES = [("s3-farm", 1), ("s4-tent", 1)]  # the free preview: everyone stands, so 3 poses paint both (keep in step with preview.js)
 
 
 def see_inside():
@@ -152,7 +160,26 @@ def see_inside():
 <div class="peeks">{cards}</div>
 <div class="family-row"><div><h3>Your family, drawn once</h3><p class="muted">Send a photo of your child, the grown-up who reads with them and your pet (or use ours). We draw each of them once in the book style, and they appear in every book you choose.</p>
 <p><a class="btn red" href="books.html">Look inside every book</a></p></div><div class="family-figs">{family}</div></div>
+{try_family()}
 </div></section>'''
+
+
+def try_family():
+    """See your own family: try.js draws their characters from photos and paints two pages with them (free preview)."""
+    pages = "".join(f'''<figure class="peek" data-try-page="{bid}:{n}" style="--bc:{dict((x["n"], x["color"]) for x in STAGES)[next(b["stage"] for b in READERS if b["id"] == bid)]}">
+<div class="peek-pic"><canvas width="1600" height="900" aria-hidden="true"></canvas></div>
+<p class="peek-words" data-words></p>
+<figcaption><b>{e(next(b["title"] for b in READERS if b["id"] == bid))}</b> · page {n}</figcaption></figure>''' for bid, n in TRY_PAGES)
+    return f'''<div class="try" data-try hidden>
+<div class="try-head"><p class="eyebrow">Free preview</p><h3>See your own family in the books</h3>
+<p class="muted">Add a photo of your child, and of the grown-up and pet if you like (or keep ours). We'll draw them and paint two pages with them, free, in a minute or two. Your photos stay private: they're shrunk on your device, never shown to anyone else, and you can delete them at any time.</p></div>
+<div class="try-picks"></div>
+<label class="check try-consent"><input type="checkbox" data-try-consent><span>I'm the parent or guardian, or I have permission from the people in these photos to use them.</span></label>
+<div class="try-actions"><button type="button" class="btn red" data-try-go>Draw my family</button><button type="button" class="btn ghost btn-sm" data-try-delete hidden>Delete my photos</button></div>
+<p class="try-msg" role="status" aria-live="polite"></p>
+<div class="peeks try-pages" hidden>{pages}</div>
+<div class="try-next" hidden><p>Your family is saved in this browser for 14 days, ready for your books.</p><p><a class="btn red" href="books.html">Choose your books</a> <a class="btn ghost" href="make.html">Change your characters</a></p></div>
+</div>'''
 
 
 def stage_card(s):
@@ -308,7 +335,7 @@ def home():
 """
     return page("Family Learn to Read: personalised reading books at your child's level",
                 "Early reading books and phonics books with your family as the characters. Matched to your child's school reading level, printed or online. Ages 4 to 7.",
-                "", body, "stages", scripts=("finder.js", "readers.js", "layers.js", "home.js"))
+                "", body, "stages", scripts=("finder.js", "readers.js", "layers.js", "family.js", "preview.js", "home.js", "try.js"))
 
 
 # ---------- Reading check ----------
@@ -423,7 +450,7 @@ def make():
 <div class="mk-next" hidden><h2>Next: order your books</h2><p>Ordering opens soon. Join the list and we'll email you a {DISCOUNT}% founding-family discount; your characters are kept for 14 days.</p><a class="btn red" href="index.html#join">Join the list</a></div>
 </div></div></section>"""
     return page("Make your characters | Family Learn to Read", "Turn photos of your child, a grown-up and your pet into the characters of their own reading books. Free preview.",
-                "make.html", body, "", scripts=("readers.js", "family.js", "make.js"))
+                "make.html", body, "", scripts=("readers.js", "layers.js", "family.js", "preview.js", "make.js"))
 
 
 def print_page():
