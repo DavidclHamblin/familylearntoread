@@ -21,7 +21,7 @@ FLR.readerRoles = [
 var NIGHT = "It is the middle of the NIGHT: a dark navy-blue sky, moonlight, deep blue shadows and no daylight anywhere. ";
 var PJS = "cosy blue pyjamas with little stars and slippers";
 var TORCH = "+holding a small lit torch in one hand, a short soft yellow beam shining from it";
-var PJS_TORCH = PJS + ", holding a small lit torch in the pointing hand with a soft yellow beam shining up from it";
+var PJS_TORCH = PJS + ", holding a small torch in the pointing hand, its lamp end glowing bright yellow (no beam of light is drawn)";
 var OWL = "A round, fluffy brown owl with big kind eyes";
 var RAINCOAT = "a bright red raincoat with the hood down, blue jeans and red wellington boots";
 var MUDDY = RAINCOAT + ", with splashes of brown mud up the boots and jeans";
@@ -85,20 +85,20 @@ FLR.readers = [
   { id: "s3-owl", stage: 3, title: "The night owl", blurb: "Hoot, hoot! Who is in the garden at night?", cast: ["child", "adult", "pet"], teach: ["tree"], pages: [
     { w: { child: PJS }, p: { child: "bed" }, x: { child: 0.3 }, t: "It is night. {child} is in bed. {child} hears a hoot.", d: "{child} sits up in bed at night, eyes wide, listening; moonlight through the curtains.",
       set: NIGHT + "A cosy child's bedroom with the lamp off, lit only by moonlight. A window with open curtains on the right side of the picture shows the dark night sky, a moon and stars. A rug, a bedside table and a shelf of teddies. There is NO bed in the room: leave a clear stretch of empty floor across the left half of the picture" },
-    { w: { child: PJS }, p: { child: "stand" }, x: { child: 0.56 }, t: "Hoot, hoot! {child} gets up to look.", d: "{child} in pyjamas tiptoes to the window to look out at the night.",
+    { w: { child: PJS }, p: { child: "stand" }, x: { child: 0.7 }, t: "Hoot, hoot! {child} gets up to look.", d: "{child} in pyjamas tiptoes to the window to look out at the night.",
       set: NIGHT + "The same cosy child's bedroom by moonlight. A big window with the curtains pulled open fills the right third of the picture, showing the dark night sky, a moon, stars and the black shapes of trees. An empty bed with the covers thrown back stands against the far wall in the middle. Bare wooden floor in front" },
     { w: { child: PJS, adult: TORCH }, t: "{adult} gets a torch. {child} and {adult} go to the garden.", d: "{adult} holds a torch; {child} and {adult} step quietly into the dark garden.",
       set: NIGHT + "A back garden just outside the back door: a stone path, flower beds and bushes in dark blues and greens, the house's lit kitchen window glowing warm yellow, a big moon and stars in the dark sky" },
     { w: { child: PJS, adult: TORCH }, p: { child: "point", adult: "hold" }, t: "The moon is big and the garden is dark.", d: "{child}, {adult} and {pet} stand in the dark garden; {adult} holds the torch; they all look up at a big full moon.",
-      set: NIGHT + "A dark garden with a lawn, bushes and a big oak tree at the far right edge. A very big, bright, round full moon fills the upper middle of the sky, with stars around it. Moonlit grass in front" },
+      set: NIGHT + "A dark garden with a lawn, bushes and a big oak tree at the far right edge. A very big, bright, round full moon high in the sky a little LEFT of the middle of the picture (about 40% of the way across from the left edge), with stars around it. Moonlit grass in front" },
     { w: { child: PJS_TORCH }, p: { child: "point" }, x: { child: 0.22 }, t: "Hoot! {child} looks up at the oak tree.", d: "{child} points the torch up into the branches of the big oak tree.",
-      set: NIGHT + "A big old oak tree with its trunk in the middle of the picture and its branches spreading over the top of the picture, against the dark starry sky. Moonlit grass. Nothing on the grass: no boots, bags, toys or torch" },
+      set: NIGHT + "A big old oak tree with its trunk in the middle of the picture and its branches spreading over the top of the picture, against the dark starry sky. A soft pale-yellow torch beam shines diagonally up from the bottom-left corner into the branches. Moonlit grass. Nothing on the grass: no boots, bags, toys or torch" },
     { w: { child: PJS }, t: "An owl sits on the oak. It looks down at {child}.", d: "A round fluffy owl with big eyes sits on a branch, looking down kindly at {child}.",
       set: NIGHT + "A big oak tree on the right with a low branch reaching across. " + OWL + " sits on that branch, looking down. Dark starry sky and moonlit grass" },
     { w: { child: PJS }, p: { child: "stand", pet: "stand" }, t: "{pet} sees the owl and will not be quiet. Hush, {pet}!", d: "{pet} looks up at the owl, mouth open; {child} holds a finger to lips.",
       set: NIGHT + "A big oak tree on the left with a branch reaching across the top. " + OWL + " sits on that branch, looking down. Dark starry sky and moonlit grass" },
-    { w: { child: PJS, adult: TORCH }, t: "The owl will not go. It sits and looks at them.", d: "The owl stays calmly on its branch; {child}, {adult} and {pet} gaze up at it.",
-      set: NIGHT + "A big oak tree with a long branch across the top right. " + OWL + " sits calmly on that branch, looking down. Dark starry sky, moonlit grass and dark bushes" },
+    { w: { child: PJS, adult: TORCH }, x: { adult: 0.46, child: 0.6, pet: 0.74 }, t: "The owl will not go. It sits and looks at them.", d: "The owl stays calmly on its branch; {child}, {adult} and {pet} gaze up at it.",
+      set: NIGHT + "A big oak tree at the far right edge with a long branch reaching across the top of the picture. " + OWL + " sits calmly on that branch near the top right corner, looking down. The dark starry sky is one even colour all the way across. Moonlit grass and dark bushes" },
     { t: "Then the owl gets up and is off into the night.", d: "The owl flies across the moon, wings wide." },
     { w: { child: PJS }, p: { child: "bed" }, x: { child: 0.66 }, t: "{child} gets back in bed. Hoot, hoot! Good night!", d: "{child} snuggled back in bed, smiling sleepily; the owl is a small shape on the moon outside.",
       set: NIGHT + "The same cosy child's bedroom with a warm bedside lamp glowing. A window on the left side shows a big moon with the small dark shape of an owl flying across it. A rug and a bedside table. There is NO bed in the room: leave a clear stretch of empty floor across the right half of the picture" }
