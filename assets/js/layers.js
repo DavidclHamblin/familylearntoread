@@ -7,7 +7,7 @@ var FLR = (typeof window !== "undefined" ? (window.FLR = window.FLR || {}) : {})
 (function (F) {
   "use strict";
   var L = F.layers = {};
-  L.PEOPLE = ["stand", "walk", "wave", "point", "cheer", "hold", "crouch", "sit"];
+  L.PEOPLE = ["stand", "walk", "wave", "point", "cheer", "hold", "crouch", "sit", "bed"];  // "bed": the child in their bed (the bed is part of the cut-out)
   L.PETS = ["stand", "sit", "run", "lie", "roll"];
   // Words in a character's part of the picture description, and the pose they get: [pattern, person, pet].
   var RULES = [
@@ -21,7 +21,7 @@ var FLR = (typeof window !== "undefined" ? (window.FLR = window.FLR || {}) : {})
     [/\b(walk|stroll|run|race|trot|follow|head|go|went|set off)/, "walk", "run"]
   ];
   var HEIGHT = { adult: 0.74, child: 0.56, pet: 0.3 };  // of the picture's height, standing
-  var SHRINK = { sit: 0.68, crouch: 0.7, lie: 0.62, roll: 0.6, cheer: 1.06 };
+  var SHRINK = { sit: 0.68, crouch: 0.7, lie: 0.62, roll: 0.6, cheer: 1.06, bed: 0.88 };
 
   // The part of the description about this role: from its {role} to the next role or the end of the clause.
   function partFor(d, role) {
@@ -171,7 +171,7 @@ var FLR = (typeof window !== "undefined" ? (window.FLR = window.FLR || {}) : {})
   };
   // Our example family's pictures (stand-ins, never a real person) and the sets, from the cartoon service.
   // Change this after repainting any example pictures, so browsers and the cache fetch the new ones at once.
-  L.ART = "20261123e";
+  L.ART = "20261126a";
   L.exampleUrl = function (api, bookId) {
     api = (api || "").replace(/\/+$/, "");
     return {
